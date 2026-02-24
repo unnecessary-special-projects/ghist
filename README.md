@@ -27,9 +27,9 @@
 
 ## Why
 
-Jira and Linear live in the browser. Your code lives in the repo. That gap means project state is always a context switch away and your coding agent can't touch it at all.
+Jira and Linear are great tools. But they live outside your repo, require auth and API setup to use programmatically, and weren't built with coding agents in mind. Ghist takes a different approach — tasks live in `.ghist/` right next to your code, with a simple CLI that any agent can use out of the box.
 
-Ghist closes that gap. It's a lightweight task manager that lives in `.ghist/`, right next to your code. A single CLI is the only interface, so your coding agent can create tasks, write plans, update status, and log decisions the same way it edits files.
+It's a good fit for indie developers, small teams, and solo AI-assisted projects. If you're running a large engineering org with dedicated project managers, you probably want Jira.
 
 - **Repo-native.** Tasks and decisions are versioned alongside your code, no accounts or external services
 - **Agent-operable.** The full CLI is available to any coding agent that can run a command
