@@ -68,6 +68,18 @@ Then open `http://localhost:4777`.
 
 `ghist init` creates a `.ghist/` directory and injects a small block into your `CLAUDE.md` (or `AGENTS.md`, `.cursorrules`, etc.) that tells the agent to sync with ghist at the start of every session.
 
+### Updating
+
+```bash
+brew upgrade ghist
+```
+
+After upgrading, run `ghist refresh` in your project to apply any new migrations and pick up new optional features:
+
+```bash
+ghist refresh
+```
+
 ## In Practice
 
 ### Migrating from Linear or Jira
@@ -106,6 +118,20 @@ Recent Events:
 ```
 
 If there is an in-progress task with a saved plan, the agent reads it and continues from where the last session ended.
+
+### Commit linking
+
+When Claude Code makes a git commit during a session, ghist automatically prompts it to link the commit hash to the active task — and close the task if it's done.
+
+No manual linking needed. Set it up once during `ghist init` (or enable it later with `ghist refresh`), and every commit your agent makes gets traced back to the task that drove it.
+
+You can also link commits manually:
+
+```bash
+ghist task update <id> --status done --commit-hash abc1234
+```
+
+Commit hashes are shown in the web UI and link directly to GitHub if your repo has a remote configured.
 
 ### Logging decisions
 
@@ -217,6 +243,7 @@ Skills are behavioral instructions embedded in the ghist binary. They teach AI a
 | **task-workflow** | Task lifecycle — find, plan, execute, complete |
 | **auto-completion** | Detect when a task is done based on signals (tests pass, commits made) |
 | **log-thinking** | Record architectural decisions and reasoning for future sessions |
+| **commit-link** | Auto-link git commits to tasks and close them when done |
 
 Read any skill with `ghist skills show <name>`.
 
@@ -229,6 +256,7 @@ Ghist includes a built-in web dashboard served from the single binary. Run `ghis
 - **Task drawer** — create and edit tasks with inline field editing
 - **Filters** — by priority, type, and search query
 - **Markdown rendering** — task plans and descriptions render as rich text
+- **Commit links** — commit hashes link directly to GitHub when a remote is configured
 
 ## Supported Agents
 
