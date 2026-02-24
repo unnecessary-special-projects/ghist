@@ -397,28 +397,28 @@
       "plan": "",
       "status": "in_progress",
       "milestone": "v0.2",
-      "commit_hash": "",
+      "commit_hash": "e6dbdef69c0c87c3adf895eb189f13466942af99",
       "priority": "low",
       "type": "improvement",
       "ref_id": "GHST-27",
       "legacy_id": "",
       "created_at": "2026-02-24T21:33:54Z",
-      "updated_at": "2026-02-24T21:35:40Z"
+      "updated_at": "2026-02-24T21:47:45Z"
     },
     {
       "id": 28,
       "title": "Claude Code commit hook for auto commit linking",
       "description": "",
       "plan": "",
-      "status": "in_progress",
+      "status": "done",
       "milestone": "v0.2",
-      "commit_hash": "",
+      "commit_hash": "40607ee0ab39c0332fcb2d43ca3ba7974e327a7e",
       "priority": "high",
       "type": "feature",
       "ref_id": "GHST-28",
       "legacy_id": "",
       "created_at": "2026-02-24T21:33:54Z",
-      "updated_at": "2026-02-24T21:35:40Z"
+      "updated_at": "2026-02-24T21:51:21Z"
     },
     {
       "id": 29,
@@ -427,13 +427,13 @@
       "plan": "",
       "status": "in_progress",
       "milestone": "v0.2",
-      "commit_hash": "",
+      "commit_hash": "e6dbdef69c0c87c3adf895eb189f13466942af99",
       "priority": "medium",
       "type": "improvement",
       "ref_id": "GHST-29",
       "legacy_id": "",
       "created_at": "2026-02-24T21:33:54Z",
-      "updated_at": "2026-02-24T21:35:40Z"
+      "updated_at": "2026-02-24T21:47:45Z"
     },
     {
       "id": 30,
@@ -488,8 +488,8 @@
     "total_tasks": 31,
     "tasks_by_status": {
       "blocked": 1,
-      "done": 6,
-      "in_progress": 10,
+      "done": 7,
+      "in_progress": 9,
       "todo": 14
     },
     "milestones": [
@@ -501,7 +501,7 @@
       {
         "name": "v0.2",
         "total": 14,
-        "done": 0
+        "done": 1
       },
       {
         "name": "v0.3",
