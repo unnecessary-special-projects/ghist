@@ -51,8 +51,8 @@ var postToolUseCmd = &cobra.Command{
 		}
 
 		msg := fmt.Sprintf(
-			"ghist: commit %s was just made. Check both in-progress and recently completed tasks — run `ghist task list --status in_progress` and `ghist task list --status done` to see candidates. Link this commit to any task that was being worked on or just closed with `ghist task update <id> --commit-hash %s`. If no tasks clearly match, skip it.",
-			hash, hash,
+			"ghist: commit %s was just made. Check both in-progress and recently completed tasks — run `ghist task list --status in_progress` and `ghist task list --status done` to see candidates. Link this commit to any task that was being worked on or just closed with `ghist task update <id> --commit-hash %s`. If the task is in_progress, also move it to done at the same time: `ghist task update <id> --status done --commit-hash %s`. If no tasks clearly match, skip it.",
+			hash, hash, hash,
 		)
 
 		response := map[string]any{
