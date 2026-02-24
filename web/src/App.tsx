@@ -16,6 +16,7 @@ export function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [drawerTask, setDrawerTask] = useState<Task | null>(null);
   const [drawerMode, setDrawerMode] = useState<'view' | 'create' | null>(null);
+  const [repoURL, setRepoURL] = useState<string>('');
 
   const {
     viewMode, setViewMode,
@@ -32,6 +33,7 @@ export function App() {
 
   useEffect(() => {
     loadTasks();
+    api.getConfig().then((c) => setRepoURL(c.github_repo_url)).catch(() => {});
   }, [loadTasks]);
 
   const handleStatusChange = async (id: number, status: TaskStatus) => {
@@ -144,6 +146,7 @@ export function App() {
         onUpdateTask={handleFieldSave}
         onCreateTask={handleCreateTask}
         onDeleteTask={handleDeleteTask}
+        repoURL={repoURL}
       />
     </div>
   );

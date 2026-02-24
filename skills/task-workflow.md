@@ -58,10 +58,25 @@ ghist log "Step 2 blocked: need API review" --task <id>
 
 ### 5. Complete
 
-```
-ghist task update <id> --status done
-ghist log "Task complete — implemented X, tested Y" --task <id>
-```
+Do not mark the task as done automatically. Instead:
+
+1. Write a short implementation note summarising what was done:
+   ```
+   ghist log "Brief summary of what was implemented and any key decisions made" --type decision --task <id>
+   ```
+
+2. Link the commit if applicable:
+   ```
+   ghist task update <id> --commit-hash abc1234
+   ```
+
+3. Ask the user for confirmation:
+   > "I think this is done — should I close the task?"
+
+4. Only mark as done once confirmed:
+   ```
+   ghist task update <id> --status done
+   ```
 
 ## Why Persist Plans?
 

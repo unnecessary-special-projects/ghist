@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/nxnze/_/ghist/ghist hook post-tool-use"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -11,18 +11,20 @@ import (
 )
 
 type Server struct {
-	store  *store.Store
-	mux    *http.ServeMux
-	webFS  fs.FS // embedded frontend files (can be nil in dev mode)
-	devMode bool
+	store     *store.Store
+	mux       *http.ServeMux
+	webFS     fs.FS
+	devMode   bool
+	repoURL   string
 }
 
-func NewServer(s *store.Store, webFS fs.FS, devMode bool) *Server {
+func NewServer(s *store.Store, webFS fs.FS, devMode bool, repoURL string) *Server {
 	srv := &Server{
 		store:   s,
 		mux:     http.NewServeMux(),
 		webFS:   webFS,
 		devMode: devMode,
+		repoURL: repoURL,
 	}
 	srv.routes()
 	return srv
@@ -43,6 +45,7 @@ func (s *Server) routes() {
 	s.mux.HandleFunc("POST /api/events", s.handleCreateEvent)
 	s.mux.HandleFunc("GET /api/tasks/{id}/events", s.handleListTaskEvents)
 	s.mux.HandleFunc("GET /api/status", s.handleStatus)
+	s.mux.HandleFunc("GET /api/config", s.handleConfig)
 
 	// Serve frontend (embedded or dev proxy)
 	if s.webFS != nil {

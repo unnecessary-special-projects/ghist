@@ -19,6 +19,7 @@ export interface ITaskDrawer {
   onUpdateTask: (id: number, data: Record<string, string>) => void;
   onCreateTask: (data: { title: string; description: string; status: TaskStatus; milestone: string; priority: TaskPriority; type: TaskType }) => void;
   onDeleteTask: (id: number) => void;
+  repoURL?: string;
 }
 
 type Tab = "details" | "plan" | "activity";
@@ -127,7 +128,7 @@ export const TaskDrawer: React.FC<ITaskDrawer> = (props) => {
 
             <div className={css.content}>
               {tab === "details" ? (
-                <DetailsTab task={props.task} onUpdate={props.onUpdateTask} onDelete={props.onDeleteTask} />
+                <DetailsTab task={props.task} onUpdate={props.onUpdateTask} onDelete={props.onDeleteTask} repoURL={props.repoURL} />
               ) : tab === "plan" ? (
                 <PlanTab task={props.task} onUpdate={props.onUpdateTask} />
               ) : (
@@ -205,7 +206,7 @@ function CreateContent({
 
 // ---------- Details Tab ----------
 
-function DetailsTab({ task, onUpdate, onDelete }: { task: Task; onUpdate: (id: number, data: Record<string, string>) => void; onDelete: (id: number) => void }) {
+function DetailsTab({ task, onUpdate, onDelete, repoURL }: { task: Task; onUpdate: (id: number, data: Record<string, string>) => void; onDelete: (id: number) => void; repoURL?: string }) {
   const save = (field: string) => (value: string) => onUpdate(task.id, { [field]: value });
 
   return (
@@ -252,7 +253,10 @@ function DetailsTab({ task, onUpdate, onDelete }: { task: Task; onUpdate: (id: n
       <InlineField label="Description" value={task.description} onSave={save("description")} type="textarea" />
       {task.commit_hash && (
         <InlineField label="Commit" value={task.commit_hash} onSave={() => {}} readOnly
-          renderValue={(v) => <code className={css.commitHash}>{v.slice(0, 8)}</code>}
+          renderValue={(v) => repoURL
+            ? <a href={`${repoURL}/commit/${v}`} target="_blank" rel="noreferrer" className={css.commitLink}><code className={css.commitHash}>{v.slice(0, 8)}</code></a>
+            : <code className={css.commitHash}>{v.slice(0, 8)}</code>
+          }
         />
       )}
       {task.legacy_id && (

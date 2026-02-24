@@ -85,3 +85,7 @@ export async function createEvent(data: {
 export async function getStatus(): Promise<StatusSummary> {
   return request<StatusSummary>('/status');
 }
+
+export async function getConfig(): Promise<{ github_repo_url: string }> {
+  return request<{ github_repo_url: string }>('/config');
+}

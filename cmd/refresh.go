@@ -20,7 +20,7 @@ var refreshCmd = &cobra.Command{
 
 		fmt.Println("Refreshing ghist...")
 
-		if err := project.Refresh(cwd); err != nil {
+		if err := project.Refresh(cwd, os.Stdin); err != nil {
 			return err
 		}
 

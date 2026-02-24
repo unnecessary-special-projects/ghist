@@ -1,44 +1,55 @@
 # Auto-Completion
 
-Automatically detect when tasks are completed and update their status.
+Detect when a task is finished, write an implementation note, and ask the user before closing it.
 
-## How It Works
-
-After completing a piece of work, check if any tasks match what was just done.
-If a task's requirements are fully met, mark it as done:
-
-```
-ghist task update <id> --status done
-```
-
-## Detection Signals
+## When to Consider a Task Done
 
 Look for these signals that a task might be complete:
 
 1. **All acceptance criteria met** — if the task description lists specific criteria, verify each one.
 2. **Tests passing** — if the task involves code, confirm tests pass.
-3. **Code committed** — link the commit hash to the task:
-   ```
-   ghist task update <id> --status done --commit-hash abc1234
-   ```
-4. **No remaining blockers** — if the task was blocked, verify the blocker is resolved.
+3. **No remaining blockers** — verify nothing is left unresolved.
+
+Never assume a task is done. The user decides when to close it.
+
+## The Completion Flow
+
+### 1. Write an implementation note
+
+Before asking the user, log a short summary of what was done — what changed, what approach was taken, and any relevant trade-offs. Keep it brief.
+
+```
+ghist log "Implemented JWT middleware in internal/auth. Chose stateless tokens over sessions to keep the API simple. Added tests for expiry and invalid signature cases." --type decision --task <id>
+```
+
+### 2. Link the commit if applicable
+
+```
+ghist task update <id> --commit-hash abc1234
+```
+
+### 3. Ask the user
+
+Do not mark the task as done automatically. Instead, ask:
+
+> "I think this is done — the implementation is complete and tests are passing. Should I close the task?"
+
+Wait for confirmation before proceeding.
+
+### 4. Close only on confirmation
+
+Once the user confirms:
+
+```
+ghist task update <id> --status done
+```
 
 ## Partial Completion
 
-If a task is partially done, don't mark it as complete. Instead:
+If a task is only partially done, log what was accomplished and keep it in progress:
 
-1. Log what was accomplished:
-   ```
-   ghist log "Completed steps 1-3 of task" --task <id>
-   ```
-2. Keep the task as `in_progress`.
-3. Optionally update the description with remaining work:
-   ```
-   ghist task update <id> --description "Remaining: step 4, step 5"
-   ```
+```
+ghist log "Completed steps 1-3, remaining: step 4 (needs API review)" --task <id>
+```
 
-## Best Practices
-
-- Always verify completion before marking done — false completions create confusion.
-- Link commits to tasks whenever possible for traceability.
-- Log completion events so future sessions can see what was accomplished and when.
+Do not ask the user to close a partially complete task.

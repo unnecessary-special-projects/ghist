@@ -34,6 +34,7 @@ This project uses [ghist](https://github.com/unnecessary-special-projects/ghist)
 - ` + "`ghist skills show task-workflow`" + ` — find → plan → execute → complete loop (statuses: todo, in_planning, in_progress, done, blocked)
 - ` + "`ghist skills show auto-completion`" + ` — auto-detect task completion
 - ` + "`ghist skills show log-thinking`" + ` — log decisions and reasoning
+- ` + "`ghist skills show commit-link`" + ` — link git commits to tasks automatically
 <!-- ghist:end -->`
 
 // alwaysInject are files we always create and inject into.
@@ -58,18 +59,24 @@ func Init(projectRoot string, stdin io.Reader) error {
 		return err
 	}
 
-	// Ask about .gitignore (only on init)
 	if err := handleGitignore(projectRoot, stdin); err != nil {
 		return fmt.Errorf("handling gitignore: %w", err)
+	}
+
+	if err := SetupClaudeHook(projectRoot, stdin); err != nil {
+		return fmt.Errorf("setting up claude hook: %w", err)
 	}
 
 	return nil
 }
 
 // Refresh re-runs the setup steps (DB migration, context, CLAUDE.md injection)
-// without prompting about .gitignore. Useful after upgrading ghist.
-func Refresh(projectRoot string) error {
-	return setup(projectRoot)
+// and prompts for any new optional features not yet configured.
+func Refresh(projectRoot string, stdin io.Reader) error {
+	if err := setup(projectRoot); err != nil {
+		return err
+	}
+	return SetupClaudeHook(projectRoot, stdin)
 }
 
 func setup(projectRoot string) error {
@@ -181,36 +188,48 @@ func injectFile(path string, create bool) error {
 func handleGitignore(projectRoot string, stdin io.Reader) error {
 	gitignorePath := filepath.Join(projectRoot, ".gitignore")
 
-	// Check if .gitignore already has .ghist/
 	content, err := os.ReadFile(gitignorePath)
 	if err == nil && strings.Contains(string(content), ".ghist/") {
-		return nil // Already ignored
+		return nil // already ignored
 	}
 
-	// Check if this is a git repo
 	if _, err := os.Stat(filepath.Join(projectRoot, ".git")); os.IsNotExist(err) {
-		return nil // Not a git repo, skip
+		return nil // not a git repo
 	}
 
-	fmt.Print("Add .ghist/ to .gitignore? [Y/n] ")
+	fmt.Println()
+	fmt.Printf("  %s● Project State%s\n", ansiBold, ansiReset)
+	fmt.Println()
+	fmt.Printf("  %s.ghist/ holds your tasks, plans, and event log.%s\n", ansiDim, ansiReset)
+	fmt.Println()
+	fmt.Printf("  %sCommit it%s  — tasks and decisions travel with the repo.%s\n", ansiBold, ansiReset, ansiReset)
+	fmt.Printf("  %s            Anyone who clones sees the current backlog.%s\n", ansiDim, ansiReset)
+	fmt.Println()
+	fmt.Printf("  %sIgnore it%s  — state stays local to your machine.%s\n", ansiBold, ansiReset, ansiReset)
+	fmt.Printf("  %s            Better for private notes or solo projects.%s\n", ansiDim, ansiReset)
+	fmt.Println()
+	fmt.Printf("  Add .ghist/ to .gitignore? %s[y/N]%s ", ansiDim, ansiReset)
+
 	reader := bufio.NewReader(stdin)
 	answer, _ := reader.ReadString('\n')
 	answer = strings.TrimSpace(strings.ToLower(answer))
 
-	if answer == "" || answer == "y" || answer == "yes" {
+	if answer == "y" || answer == "yes" {
 		f, err := os.OpenFile(gitignorePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			return fmt.Errorf("opening .gitignore: %w", err)
 		}
 		defer f.Close()
 
-		// Add newline if file doesn't end with one
 		if len(content) > 0 && content[len(content)-1] != '\n' {
 			f.WriteString("\n")
 		}
 		f.WriteString(".ghist/\n")
-		fmt.Println("Added .ghist/ to .gitignore")
+		fmt.Printf("  %s✓%s .ghist/ added to .gitignore\n", ansiGreen, ansiReset)
+	} else {
+		fmt.Printf("  %s✓%s .ghist/ will be committed\n", ansiGreen, ansiReset)
 	}
 
+	fmt.Println()
 	return nil
 }

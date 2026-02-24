@@ -5,7 +5,7 @@
       "title": "Add README with install instructions and usage examples",
       "description": "Cover: what ghist is, how to install, quick start, CLI reference, screenshots of web UI",
       "plan": "",
-      "status": "in_planning",
+      "status": "todo",
       "milestone": "v0.1",
       "commit_hash": "",
       "priority": "medium",
@@ -13,14 +13,14 @@
       "ref_id": "GHST-1",
       "legacy_id": "",
       "created_at": "2026-02-24T08:41:24Z",
-      "updated_at": "2026-02-24T13:42:59Z"
+      "updated_at": "2026-02-24T18:43:02Z"
     },
     {
       "id": 2,
       "title": "Set up GitHub Actions CI pipeline",
       "description": "Run go test on push, build frontend, verify single binary compiles across linux/darwin/windows",
       "plan": "",
-      "status": "in_progress",
+      "status": "todo",
       "milestone": "v0.1",
       "commit_hash": "",
       "priority": "",
@@ -28,7 +28,7 @@
       "ref_id": "GHST-2",
       "legacy_id": "",
       "created_at": "2026-02-24T08:41:24Z",
-      "updated_at": "2026-02-24T14:07:53Z"
+      "updated_at": "2026-02-24T21:35:40Z"
     },
     {
       "id": 3,
@@ -140,7 +140,7 @@
       "title": "Add markdown rendering for task plans",
       "description": "",
       "plan": "## Summary\nAdd a markdown renderer to the task plan tab so agents and users can write plans in markdown and see them rendered with proper formatting — headings, code blocks, lists, and inline code.\n\n## Current behaviour\nThe plan tab shows raw markdown as plain text in a textarea. Switching to \"Preview\" mode has no rendering.\n\n## Approach\nUse `marked` for parsing and `DOMPurify` for sanitisation. Render into a styled `div` using `dangerouslySetInnerHTML`. Apply prose styles scoped to the component so they don't bleed into the rest of the UI.\n\nNo heavy dependencies — `marked` is 47kb and `DOMPurify` is 20kb. Both are well-maintained.\n\n## Implementation steps\n\n1. **Install dependencies**\n   ```bash\n   cd web \u0026\u0026 npm install marked dompurify\n   npm install --save-dev @types/dompurify\n   ```\n\n2. **Update `MarkdownPreview` component** (`web/src/components/markdown-preview/index.tsx`)\n   - Import `marked` and `DOMPurify`\n   - Parse markdown with `marked.parse(content)`\n   - Sanitise with `DOMPurify.sanitize(html)`\n   - Render with `dangerouslySetInnerHTML`\n\n3. **Add prose styles** (`web/src/components/markdown-preview/index.module.css`)\n   - Style `h1`–`h3`, `p`, `ul`, `ol`, `li`, `code`, `pre`, `blockquote`\n   - Match the existing dark theme (`#c9d1d9` body, `#0d1117` code bg)\n\n4. **Wire up in task drawer** (`web/src/components/task-drawer/index.tsx`)\n   - The `PlanTab` already uses `\u003cMarkdownPreview content={task.plan} /\u003e` — no changes needed once the component is updated\n\n## Files to change\n- `web/src/components/markdown-preview/index.tsx`\n- `web/src/components/markdown-preview/index.module.css`\n- `web/package.json` + `web/package-lock.json`\n\n## Risk\nLow. Changes are isolated to the markdown preview component. Existing edit flow is unchanged.\n",
-      "status": "in_progress",
+      "status": "todo",
       "milestone": "v0.2",
       "commit_hash": "",
       "priority": "high",
@@ -148,14 +148,14 @@
       "ref_id": "GHST-10",
       "legacy_id": "",
       "created_at": "2026-02-24T16:04:25Z",
-      "updated_at": "2026-02-24T16:10:12Z"
+      "updated_at": "2026-02-24T21:35:40Z"
     },
     {
       "id": 11,
       "title": "Implement drag and drop on board",
       "description": "",
       "plan": "",
-      "status": "in_progress",
+      "status": "todo",
       "milestone": "v0.2",
       "commit_hash": "",
       "priority": "medium",
@@ -163,14 +163,14 @@
       "ref_id": "GHST-11",
       "legacy_id": "",
       "created_at": "2026-02-24T16:04:25Z",
-      "updated_at": "2026-02-24T16:04:25Z"
+      "updated_at": "2026-02-24T21:35:40Z"
     },
     {
       "id": 12,
       "title": "Global activity feed",
       "description": "",
       "plan": "",
-      "status": "in_progress",
+      "status": "todo",
       "milestone": "v0.2",
       "commit_hash": "",
       "priority": "medium",
@@ -178,14 +178,14 @@
       "ref_id": "GHST-12",
       "legacy_id": "",
       "created_at": "2026-02-24T16:04:25Z",
-      "updated_at": "2026-02-24T16:04:25Z"
+      "updated_at": "2026-02-24T21:35:40Z"
     },
     {
       "id": 13,
       "title": "Refactor API error handling",
       "description": "",
       "plan": "",
-      "status": "in_planning",
+      "status": "todo",
       "milestone": "v0.2",
       "commit_hash": "",
       "priority": "medium",
@@ -193,14 +193,14 @@
       "ref_id": "GHST-13",
       "legacy_id": "",
       "created_at": "2026-02-24T16:04:32Z",
-      "updated_at": "2026-02-24T16:04:32Z"
+      "updated_at": "2026-02-24T18:43:04Z"
     },
     {
       "id": 14,
       "title": "Add milestone progress view",
       "description": "",
       "plan": "",
-      "status": "in_planning",
+      "status": "todo",
       "milestone": "v0.2",
       "commit_hash": "",
       "priority": "low",
@@ -208,7 +208,7 @@
       "ref_id": "GHST-14",
       "legacy_id": "",
       "created_at": "2026-02-24T16:04:32Z",
-      "updated_at": "2026-02-24T16:04:32Z"
+      "updated_at": "2026-02-24T18:43:00Z"
     },
     {
       "id": 15,
@@ -314,6 +314,156 @@
       "legacy_id": "",
       "created_at": "2026-02-24T16:04:43Z",
       "updated_at": "2026-02-24T16:04:43Z"
+    },
+    {
+      "id": 22,
+      "title": "Global activity feed in web UI",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.2",
+      "commit_hash": "",
+      "priority": "medium",
+      "type": "feature",
+      "ref_id": "GHST-22",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 23,
+      "title": "Expose event log in task drawer (Activity tab)",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.2",
+      "commit_hash": "",
+      "priority": "medium",
+      "type": "feature",
+      "ref_id": "GHST-23",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 24,
+      "title": "Homebrew tap release pipeline",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.1",
+      "commit_hash": "",
+      "priority": "high",
+      "type": "chore",
+      "ref_id": "GHST-24",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 25,
+      "title": "Update module path to unnecessary-special-projects org",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.1",
+      "commit_hash": "",
+      "priority": "high",
+      "type": "chore",
+      "ref_id": "GHST-25",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 26,
+      "title": "GitHub Actions release workflow",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.1",
+      "commit_hash": "",
+      "priority": "high",
+      "type": "chore",
+      "ref_id": "GHST-26",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 27,
+      "title": "Clickable commit hash linking to GitHub",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.2",
+      "commit_hash": "",
+      "priority": "low",
+      "type": "improvement",
+      "ref_id": "GHST-27",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 28,
+      "title": "Claude Code commit hook for auto commit linking",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.2",
+      "commit_hash": "",
+      "priority": "high",
+      "type": "feature",
+      "ref_id": "GHST-28",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 29,
+      "title": "Styled init flow with gitignore and hook prompts",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.2",
+      "commit_hash": "",
+      "priority": "medium",
+      "type": "improvement",
+      "ref_id": "GHST-29",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 30,
+      "title": "Board column scrolling and list view scroll fix",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.2",
+      "commit_hash": "",
+      "priority": "medium",
+      "type": "improvement",
+      "ref_id": "GHST-30",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 31,
+      "title": "README rewrite with new positioning and scenarios",
+      "description": "",
+      "plan": "",
+      "status": "in_progress",
+      "milestone": "v0.1",
+      "commit_hash": "",
+      "priority": "medium",
+      "type": "chore",
+      "ref_id": "GHST-31",
+      "legacy_id": "",
+      "created_at": "2026-02-24T21:33:54Z",
+      "updated_at": "2026-02-24T21:35:40Z"
     }
   ],
   "recent_events": [
@@ -335,23 +485,22 @@
     }
   ],
   "summary": {
-    "total_tasks": 21,
+    "total_tasks": 31,
     "tasks_by_status": {
       "blocked": 1,
       "done": 6,
-      "in_planning": 3,
-      "in_progress": 4,
-      "todo": 7
+      "in_progress": 10,
+      "todo": 14
     },
     "milestones": [
       {
         "name": "v0.1",
-        "total": 9,
+        "total": 13,
         "done": 6
       },
       {
         "name": "v0.2",
-        "total": 8,
+        "total": 14,
         "done": 0
       },
       {

@@ -3,7 +3,9 @@ package project
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 const GhistDir = ".ghist"
@@ -46,4 +48,30 @@ func ContextPath(root string) string {
 // GhistDirPath returns the full path to the .ghist/ directory given a project root.
 func GhistDirPath(root string) string {
 	return filepath.Join(root, GhistDir)
+}
+
+// DetectGitHubRepo attempts to detect the GitHub repository URL from the git remote.
+// Returns a URL like "https://github.com/owner/repo" or empty string if not found.
+func DetectGitHubRepo(root string) string {
+	cmd := exec.Command("git", "remote", "get-url", "origin")
+	cmd.Dir = root
+	out, err := cmd.Output()
+	if err != nil {
+		return ""
+	}
+	return parseGitHubURL(strings.TrimSpace(string(out)))
+}
+
+func parseGitHubURL(remote string) string {
+	// SSH format: git@github.com:owner/repo.git
+	if strings.HasPrefix(remote, "git@github.com:") {
+		path := strings.TrimPrefix(remote, "git@github.com:")
+		path = strings.TrimSuffix(path, ".git")
+		return "https://github.com/" + path
+	}
+	// HTTPS format: https://github.com/owner/repo.git
+	if strings.Contains(remote, "github.com/") {
+		return strings.TrimSuffix(remote, ".git")
+	}
+	return ""
 }

@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/unnecessary-special-projects/ghist/internal/api"
+	"github.com/unnecessary-special-projects/ghist/internal/project"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +25,7 @@ var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Start local web server with Kanban board UI",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		_, s, err := openStore()
+		root, s, err := openStore()
 		if err != nil {
 			return err
 		}
@@ -43,7 +44,8 @@ var serveCmd = &cobra.Command{
 			}
 		}
 
-		srv := api.NewServer(s, frontendFS, dev)
+		repoURL := project.DetectGitHubRepo(root)
+		srv := api.NewServer(s, frontendFS, dev, repoURL)
 		addr := fmt.Sprintf(":%d", port)
 
 		fmt.Printf("ghist server starting on http://localhost:%d\n", port)

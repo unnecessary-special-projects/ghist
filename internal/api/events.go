@@ -49,6 +49,12 @@ func (s *Server) handleListTaskEvents(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, events)
 }
 
+func (s *Server) handleConfig(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]string{
+		"github_repo_url": s.repoURL,
+	})
+}
+
 func (s *Server) handleListEvents(w http.ResponseWriter, r *http.Request) {
 	limit := 20
 	if l := r.URL.Query().Get("limit"); l != "" {
