@@ -22,7 +22,7 @@ jobs:
           node-version: 20
 
       - name: Build frontend
-        run: cd web && npm install && npm run build
+        run: cd web && npm ci && npm run build
 
       - uses: goreleaser/goreleaser-action@v6
         with:
