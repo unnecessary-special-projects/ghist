@@ -7,9 +7,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/coderstone/ghist/internal/output"
-	"github.com/coderstone/ghist/internal/project"
-	"github.com/coderstone/ghist/internal/store"
+	"github.com/unnecessary-special-projects/ghist/internal/output"
+	"github.com/unnecessary-special-projects/ghist/internal/project"
+	"github.com/unnecessary-special-projects/ghist/internal/store"
 	"github.com/spf13/cobra"
 )
 

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/coderstone/ghist/internal/models"
-	"github.com/coderstone/ghist/internal/store"
+	"github.com/unnecessary-special-projects/ghist/internal/models"
+	"github.com/unnecessary-special-projects/ghist/internal/store"
 )
 
 // UpdateContext reads current state from the store and writes current_context.json.

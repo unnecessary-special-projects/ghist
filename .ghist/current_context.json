@@ -4,38 +4,64 @@
       "id": 1,
       "title": "Add README with install instructions and usage examples",
       "description": "Cover: what ghist is, how to install, quick start, CLI reference, screenshots of web UI",
-      "status": "todo",
+      "plan": "",
+      "status": "in_planning",
       "milestone": "v0.1",
       "commit_hash": "",
+      "priority": "medium",
+      "type": "feature",
+      "ref_id": "GHST-1",
+      "legacy_id": "",
       "created_at": "2026-02-24T08:41:24Z",
-      "updated_at": "2026-02-24T08:41:24Z"
+      "updated_at": "2026-02-24T13:42:59Z"
     },
     {
       "id": 2,
       "title": "Set up GitHub Actions CI pipeline",
       "description": "Run go test on push, build frontend, verify single binary compiles across linux/darwin/windows",
-      "status": "todo",
+      "plan": "",
+      "status": "in_progress",
       "milestone": "v0.1",
       "commit_hash": "",
+      "priority": "",
+      "type": "",
+      "ref_id": "GHST-2",
+      "legacy_id": "",
       "created_at": "2026-02-24T08:41:24Z",
-      "updated_at": "2026-02-24T08:41:24Z"
+      "updated_at": "2026-02-24T14:07:53Z"
     },
     {
       "id": 3,
       "title": "Add goreleaser workflow for tagged releases",
       "description": "Wire .goreleaser.yaml into a GitHub Actions release workflow so pushing a tag auto-publishes binaries",
+      "plan": "",
       "status": "todo",
       "milestone": "v0.1",
       "commit_hash": "",
+      "priority": "",
+      "type": "bug",
+      "ref_id": "GHST-3",
+      "legacy_id": "",
       "created_at": "2026-02-24T08:41:24Z",
-      "updated_at": "2026-02-24T08:41:24Z"
+      "updated_at": "2026-02-24T13:41:46Z"
     }
   ],
-  "recent_events": null,
+  "recent_events": [
+    {
+      "id": 1,
+      "type": "decision",
+      "message": "Decided to keep the README focused on repo-native task management angle rather than AI memory",
+      "metadata": "{}",
+      "task_id": 1,
+      "created_at": "2026-02-24T15:06:13Z"
+    }
+  ],
   "summary": {
     "total_tasks": 3,
     "tasks_by_status": {
-      "todo": 3
+      "in_planning": 1,
+      "in_progress": 1,
+      "todo": 1
     },
     "milestones": [
       {
@@ -44,6 +70,15 @@
         "done": 0
       }
     ],
-    "recent_events": null
+    "recent_events": [
+      {
+        "id": 1,
+        "type": "decision",
+        "message": "Decided to keep the README focused on repo-native task management angle rather than AI memory",
+        "metadata": "{}",
+        "task_id": 1,
+        "created_at": "2026-02-24T15:06:13Z"
+      }
+    ]
   }
 }

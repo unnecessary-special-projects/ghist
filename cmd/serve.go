@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/coderstone/ghist/internal/api"
+	"github.com/unnecessary-special-projects/ghist/internal/api"
 	"github.com/spf13/cobra"
 )
 

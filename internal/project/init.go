@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/coderstone/ghist/internal/store"
+	"github.com/unnecessary-special-projects/ghist/internal/store"
 )
 
 const ghistMarkerStart = "<!-- ghist:start -->"
@@ -17,7 +17,7 @@ const ghistMarkerEnd = "<!-- ghist:end -->"
 const ghistInjectedContent = `<!-- ghist:start -->
 ## Ghist — Project Memory
 
-This project uses [ghist](https://github.com/coderstone/ghist) for persistent project state.
+This project uses [ghist](https://github.com/unnecessary-special-projects/ghist) for persistent project state.
 
 **Required:** Run ` + "`ghist status`" + ` at the start of every session.
 

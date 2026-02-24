@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/coderstone/ghist/internal/models"
+	"github.com/unnecessary-special-projects/ghist/internal/models"
 	"github.com/spf13/cobra"
 )
 

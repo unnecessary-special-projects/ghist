@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/coderstone/ghist/internal/models"
-	"github.com/coderstone/ghist/internal/store"
+	"github.com/unnecessary-special-projects/ghist/internal/models"
+	"github.com/unnecessary-special-projects/ghist/internal/store"
 )
 
 func (s *Server) handleListTasks(w http.ResponseWriter, r *http.Request) {

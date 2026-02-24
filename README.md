@@ -5,8 +5,8 @@
 <h1 align="center">Ghist</h1>
 
 <p align="center">
-  <strong>Project memory for AI agents.</strong><br/>
-  A local-first CLI that gives Claude, Cursor, and other AI assistants persistent context across sessions.
+  <strong>Task management that lives in your repo.</strong><br/>
+  A local-first CLI that brings your project backlog close to your code where you and your coding agent can fully control it.
 </p>
 
 <p align="center">
@@ -23,55 +23,84 @@
 
 ## Why
 
-AI agents have **zero long-term memory**. Every session starts from scratch. Your agent re-discovers the same codebase, forgets past decisions, and loses track of what's done and what's next.
+Jira and Linear live in the browser. Your code lives in the repo. That gap means project state is always a context switch away and your coding agent can't touch it at all.
 
-Ghist fixes this. It's a lightweight project memory layer that lives in your repo:
+Ghist closes that gap. It's a lightweight task manager that lives in `.ghist/`, right next to your code. A single CLI is the only interface, so your coding agent can create tasks, write plans, update status, and log decisions the same way it edits files.
 
-- **Tasks** persist across sessions — agents pick up where the last one left off
-- **Decisions get logged** — no more re-debating the same trade-offs
-- **Plans survive** — if a session ends mid-task, the next agent reads the plan and continues
-- **Context is automatic** — `ghist init` injects instructions into `CLAUDE.md` so agents know to check in
+- **Repo-native.** Tasks and decisions are versioned alongside your code, no accounts or external services
+- **Agent-operable.** The full CLI is available to any coding agent that can run a command
+- **Plans survive sessions.** Write a plan before a session ends and the next agent picks up exactly where you left off
+- **Decisions get captured.** Log the reasoning behind choices so future sessions don't re-debate the same trade-offs
 
 No cloud. No accounts. Just a SQLite database in `.ghist/` and a CLI your agent already knows how to use.
 
 ## Quickstart
 
 ```bash
-# Install
-go install github.com/coderstone/ghist@latest
+brew install unnecessary-special-projects/tap/ghist
+```
 
-# Initialize in your project
-cd your-project
+**Linux / Windows:** Download the latest binary from [GitHub Releases](https://github.com/unnecessary-special-projects/ghist/releases).
+
+Initialize ghist in your project:
+
+```bash
 ghist init
+```
 
-# That's it. Your AI agent will now run this automatically:
+From here your agent will run this automatically at the start of each session:
+
+```bash
 ghist status
 ```
 
 `ghist init` creates a `.ghist/` directory and injects a small block into your `CLAUDE.md` (or `AGENTS.md`, `.cursorrules`, etc.) that tells the agent to sync with ghist at the start of every session.
 
-### What happens next
+## In Practice
 
-1. Agent starts a session, reads `CLAUDE.md`, runs `ghist status`
-2. It sees the current tasks, recent decisions, and project state
-3. It picks up a task, writes a plan, executes, logs progress
-4. Session ends — state is persisted for next time
+### Migrating from Linear or Jira
+
+If you have an existing backlog, you don't have to start from scratch. Export it as a CSV from Linear or Jira, drop the file in your repo, and tell your agent to import it.
+
+> "I've dropped my Linear export at `linear-export.csv`. Add all the tasks to ghist."
+
+The agent reads the file and runs `ghist task add` for each row, mapping titles, descriptions, priorities, and statuses. Your entire backlog is in ghist in seconds.
+
+### Starting a task
+
+Tell your agent to work on something and it handles the full lifecycle.
+
+> "Work on the user authentication feature."
+
+The agent finds the task, moves it to `in_planning`, writes out a plan with its approach and the files it intends to change, then moves to `in_progress` and starts executing. The plan is saved to the task so if the session ends mid-way, the next agent reads it and continues without needing to be re-briefed.
+
+### Picking up where you left off
+
+At the start of every session the agent runs `ghist status` and reads the current project state.
 
 ```
 $ ghist status
 Project Status
 ==============
 
-Tasks: 12 total (3 todo, 2 in_progress, 6 done, 1 blocked)
+Tasks: 8 total (2 todo, 1 in_progress, 5 done)
 
-Milestones:
-  v0.1-mvp             8/10 (80%)
-  v0.2-web              1/2 (50%)
+In Progress:
+  #4  User authentication  [plan saved]
 
 Recent Events:
-  [2025-06-14 09:32] Completed auth middleware, all tests passing (task #7)
-  [2025-06-14 09:15] Decision: using JWT over sessions for stateless API (task #7)
-  [2025-06-13 22:41] Started planning for web dashboard (task #11)
+  [2025-06-14 09:15] Started implementing JWT middleware
+  [2025-06-14 09:02] Moved task #4 to in_progress
+```
+
+If there is an in-progress task with a saved plan, the agent reads it and continues from where the last session ended.
+
+### Logging decisions
+
+As the agent works it can log decisions and notes to the event timeline. These show up in `ghist status` so future sessions have the context they need without re-debating the same trade-offs.
+
+```bash
+ghist log "Using JWT over sessions, simpler for stateless API" --type decision --task 4
 ```
 
 ## How It Works

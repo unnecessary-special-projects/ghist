@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/coderstone/ghist/internal/models"
+	"github.com/unnecessary-special-projects/ghist/internal/models"
 )
 
 func (s *Store) CreateOpportunity(name, notes string) (*models.Opportunity, error) {

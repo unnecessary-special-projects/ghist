@@ -1,4 +1,4 @@
-module github.com/coderstone/ghist
+module github.com/unnecessary-special-projects/ghist
 
 go 1.25.0
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/coderstone/ghist/internal/project"
+	"github.com/unnecessary-special-projects/ghist/internal/project"
 	"github.com/spf13/cobra"
 )
 

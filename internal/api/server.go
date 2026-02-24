@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/coderstone/ghist/internal/store"
+	"github.com/unnecessary-special-projects/ghist/internal/store"
 )
 
 type Server struct {
@@ -40,6 +40,8 @@ func (s *Server) routes() {
 	s.mux.HandleFunc("PATCH /api/tasks/{id}", s.handleUpdateTask)
 	s.mux.HandleFunc("DELETE /api/tasks/{id}", s.handleDeleteTask)
 	s.mux.HandleFunc("GET /api/events", s.handleListEvents)
+	s.mux.HandleFunc("POST /api/events", s.handleCreateEvent)
+	s.mux.HandleFunc("GET /api/tasks/{id}/events", s.handleListTaskEvents)
 	s.mux.HandleFunc("GET /api/status", s.handleStatus)
 
 	// Serve frontend (embedded or dev proxy)

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/coderstone/ghist/internal/models"
+	"github.com/unnecessary-special-projects/ghist/internal/models"
 )
 
 func PrintTaskTable(tasks []models.Task) {

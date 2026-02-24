@@ -67,6 +67,21 @@ export async function listEvents(limit?: number): Promise<Event[]> {
   return request<Event[]>(`/events${qs}`);
 }
 
+export async function listTaskEvents(taskId: number): Promise<Event[]> {
+  return request<Event[]>(`/tasks/${taskId}/events`);
+}
+
+export async function createEvent(data: {
+  type?: string;
+  message: string;
+  task_id?: number | null;
+}): Promise<Event> {
+  return request<Event>('/events', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
 export async function getStatus(): Promise<StatusSummary> {
   return request<StatusSummary>('/status');
 }

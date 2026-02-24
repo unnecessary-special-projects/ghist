@@ -3,7 +3,7 @@ package main
 import (
 	"embed"
 
-	"github.com/coderstone/ghist/cmd"
+	"github.com/unnecessary-special-projects/ghist/cmd"
 )
 
 //go:embed skills/*.md

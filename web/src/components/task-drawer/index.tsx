@@ -1,14 +1,16 @@
 import cx from "classnames";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import css from "./index.module.css";
-import type { Task, TaskStatus, TaskPriority, TaskType } from "../../types";
+import type { Task, TaskStatus, TaskPriority, TaskType, EventType, Event } from "../../types";
 import {
   STATUSES, STATUS_LABELS, STATUS_COLORS,
   PRIORITIES, PRIORITY_LABELS, PRIORITY_COLORS,
   TASK_TYPES, TYPE_LABELS, TYPE_COLORS,
+  EVENT_TYPES, EVENT_TYPE_LABELS, EVENT_TYPE_COLORS,
 } from "../../types";
 import { InlineField } from "../inline-field";
 import { MarkdownPreview } from "../markdown-preview";
+import * as api from "../../api/client";
 
 export interface ITaskDrawer {
   task: Task | null;
@@ -19,7 +21,7 @@ export interface ITaskDrawer {
   onDeleteTask: (id: number) => void;
 }
 
-type Tab = "details" | "plan";
+type Tab = "details" | "plan" | "activity";
 
 export const TaskDrawer: React.FC<ITaskDrawer> = (props) => {
   const [tab, setTab] = useState<Tab>("details");
@@ -114,14 +116,22 @@ export const TaskDrawer: React.FC<ITaskDrawer> = (props) => {
                 >
                   Plan
                 </button>
+                <button
+                  className={cx(css.tab, { [css.tabActive]: tab === "activity" })}
+                  onClick={() => setTab("activity")}
+                >
+                  Activity
+                </button>
               </div>
             </div>
 
             <div className={css.content}>
               {tab === "details" ? (
                 <DetailsTab task={props.task} onUpdate={props.onUpdateTask} onDelete={props.onDeleteTask} />
-              ) : (
+              ) : tab === "plan" ? (
                 <PlanTab task={props.task} onUpdate={props.onUpdateTask} />
+              ) : (
+                <ActivityTab task={props.task} />
               )}
             </div>
           </>
@@ -304,6 +314,95 @@ function PlanTab({ task, onUpdate }: { task: Task; onUpdate: (id: number, data: 
           <p className={css.emptyHint}>Click Edit to write a plan manually, or ask your AI coding agent to plan this task</p>
         </div>
       )}
+    </div>
+  );
+}
+
+// ---------- Activity Tab ----------
+
+function ActivityTab({ task }: { task: Task }) {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [message, setMessage] = useState('');
+  const [type, setType] = useState<EventType>('log');
+  const [submitting, setSubmitting] = useState(false);
+
+  const loadEvents = useCallback(async () => {
+    const data = await api.listTaskEvents(task.id);
+    setEvents(data);
+  }, [task.id]);
+
+  useEffect(() => {
+    loadEvents();
+  }, [loadEvents]);
+
+  const handleSubmit = async () => {
+    if (!message.trim()) return;
+    setSubmitting(true);
+    try {
+      await api.createEvent({ type, message: message.trim(), task_id: task.id });
+      setMessage('');
+      await loadEvents();
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className={css.activityContainer}>
+      <div className={css.eventList}>
+        {events.length === 0 ? (
+          <div className={css.emptyActivity}>
+            <p className={css.emptyText}>No activity yet</p>
+            <p className={css.emptyHint}>Log decisions and notes as you work on this task</p>
+          </div>
+        ) : (
+          events.map((e) => (
+            <div key={e.id} className={css.eventItem}>
+              <div className={css.eventItemHeader}>
+                <span
+                  className={css.eventTypeBadge}
+                  style={{
+                    color: EVENT_TYPE_COLORS[e.type as EventType] ?? '#768390',
+                    backgroundColor: `${EVENT_TYPE_COLORS[e.type as EventType] ?? '#768390'}1a`,
+                  }}
+                >
+                  {EVENT_TYPE_LABELS[e.type as EventType] ?? e.type}
+                </span>
+                <span className={css.eventTime}>{formatDate(e.created_at)}</span>
+              </div>
+              <p className={css.eventMessage}>{e.message}</p>
+            </div>
+          ))
+        )}
+      </div>
+      <div className={css.eventForm}>
+        <textarea
+          className={`${css.input} ${css.inputTextarea}`}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Add a note or decision..."
+          rows={3}
+        />
+        <div className={css.eventFormActions}>
+          <select
+            className={css.input}
+            value={type}
+            onChange={(e) => setType(e.target.value as EventType)}
+            style={{ width: 'auto' }}
+          >
+            {EVENT_TYPES.map((t) => (
+              <option key={t} value={t}>{EVENT_TYPE_LABELS[t]}</option>
+            ))}
+          </select>
+          <button
+            className={css.createBtn}
+            onClick={handleSubmit}
+            disabled={submitting || !message.trim()}
+          >
+            Add
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

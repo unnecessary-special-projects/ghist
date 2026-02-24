@@ -95,3 +95,19 @@ export const TYPE_COLORS: Record<TaskType, string> = {
   improvement: '#58a6ff',
   chore: '#768390',
 };
+
+export type EventType = 'log' | 'decision' | 'note';
+
+export const EVENT_TYPES: EventType[] = ['log', 'decision', 'note'];
+
+export const EVENT_TYPE_LABELS: Record<EventType, string> = {
+  log: 'Log',
+  decision: 'Decision',
+  note: 'Note',
+};
+
+export const EVENT_TYPE_COLORS: Record<EventType, string> = {
+  log: '#58a6ff',
+  decision: '#f0883e',
+  note: '#768390',
+};

@@ -1,6 +1,11 @@
+import cx from "classnames";
 import css from "./index.module.css";
 
+export type AppView = "tasks" | "activity";
+
 export interface IHeader {
+  view: AppView;
+  onViewChange: (view: AppView) => void;
   onNewTask: () => void;
 }
 
@@ -12,13 +17,26 @@ export const Header: React.FC<IHeader> = (props) => {
       </div>
       <div className={css.center}>
         <div className={css.nav}>
-          <button className={`${css.navItem} ${css.navItemActive}`}>Tasks</button>
+          <button
+            className={cx(css.navItem, { [css.navItemActive]: props.view === "tasks" })}
+            onClick={() => props.onViewChange("tasks")}
+          >
+            Tasks
+          </button>
+          <button
+            className={cx(css.navItem, { [css.navItemActive]: props.view === "activity" })}
+            onClick={() => props.onViewChange("activity")}
+          >
+            Activity
+          </button>
         </div>
       </div>
       <div className={css.right}>
-        <button className={css.addButton} onClick={props.onNewTask}>
-          + New Task
-        </button>
+        {props.view === "tasks" && (
+          <button className={css.addButton} onClick={props.onNewTask}>
+            + New Task
+          </button>
+        )}
       </div>
     </header>
   );

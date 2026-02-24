@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/coderstone/ghist/internal/models"
+	"github.com/unnecessary-special-projects/ghist/internal/models"
 )
 
 const taskColumns = `id, title, description, plan, status, milestone, commit_hash, priority, type, ref_id, legacy_id, created_at, updated_at`
