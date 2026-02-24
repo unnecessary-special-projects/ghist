@@ -5,8 +5,8 @@
 <h1 align="center">Ghist</h1>
 
 <p align="center">
-  <strong>Task management that lives in your repo.</strong><br/>
-  A local-first CLI that brings your project backlog close to your code where you and your coding agent can fully control it.
+  <strong>Task management that lives in your repo. With persistent memory.</strong><br/>
+  A local-first CLI that brings your project backlog close to your code. Tasks, plans, and decisions persist across sessions so your coding agent always knows what's been done, what's in progress, and why certain choices were made.
 </p>
 
 <p align="center">
