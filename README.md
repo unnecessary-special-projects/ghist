@@ -19,6 +19,10 @@
   <a href="#building-from-source">Building</a>
 </p>
 
+<p align="center">
+  <img src="demo-tasks.png" alt="Ghist task board" width="100%" />
+</p>
+
 ---
 
 ## Why
@@ -155,6 +159,8 @@ ghist task delete <id>                          # Delete a task
 ### Plans
 
 Plans are markdown documents attached to tasks. They survive session boundaries — if a session ends mid-task, the next agent reads the plan and picks up where you left off.
+
+<img src="demo-plan.png" alt="Ghist task plan" width="100%" />
 
 ```bash
 # Write a plan (via stdin)
