@@ -58,6 +58,14 @@ From here your agent will run this automatically at the start of each session:
 ghist status
 ```
 
+To open the web UI:
+
+```bash
+ghist serve
+```
+
+Then open `http://localhost:4777`.
+
 `ghist init` creates a `.ghist/` directory and injects a small block into your `CLAUDE.md` (or `AGENTS.md`, `.cursorrules`, etc.) that tells the agent to sync with ghist at the start of every session.
 
 ## In Practice
