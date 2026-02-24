@@ -1,0 +1,8 @@
+{
+  "name": "ghist",
+  "version": "0.1.0",
+  "description": "Project memory layer for AI agents",
+  "bin": {
+    "ghist": "./ghist"
+  }
+}

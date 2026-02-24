@@ -1,0 +1,110 @@
+.root {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f0f6fc;
+  margin: 16px 0 8px;
+}
+
+.h2 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #f0f6fc;
+  margin: 14px 0 6px;
+}
+
+.h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f0f6fc;
+  margin: 12px 0 4px;
+}
+
+.p {
+  margin: 8px 0;
+  line-height: 1.6;
+  color: #c9d1d9;
+}
+
+.a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+
+.codeBlock {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 12px;
+  overflow: auto;
+  margin: 8px 0;
+}
+
+.code {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 13px;
+  color: #c9d1d9;
+}
+
+.codeInline {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 13px;
+  background-color: rgba(110, 118, 129, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #c9d1d9;
+}
+
+.ul,
+.ol {
+  padding-left: 20px;
+  margin: 8px 0;
+  color: #c9d1d9;
+}
+
+.li {
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+.tableWrap {
+  overflow: auto;
+  margin: 8px 0;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.th {
+  border: 1px solid #30363d;
+  padding: 6px 12px;
+  background-color: #161b22;
+  color: #f0f6fc;
+  font-weight: 600;
+  text-align: left;
+}
+
+.td {
+  border: 1px solid #30363d;
+  padding: 6px 12px;
+  color: #c9d1d9;
+}
+
+.blockquote {
+  border-left: 3px solid #30363d;
+  padding-left: 12px;
+  margin: 8px 0;
+  color: #768390;
+}
+
+.hr {
+  border: none;
+  border-top: 1px solid #21262d;
+  margin: 16px 0;
+}

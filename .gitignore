@@ -1,0 +1,20 @@
+# Binary
+ghist
+dist/
+
+# Web build output
+web/node_modules/
+web/dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test
+coverage.out

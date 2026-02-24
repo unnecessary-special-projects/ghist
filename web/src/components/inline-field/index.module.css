@@ -1,0 +1,56 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #768390;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  font-size: 14px;
+  color: #c9d1d9;
+  padding: 4px 0;
+}
+
+.valueEditable {
+  font-size: 14px;
+  color: #c9d1d9;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-height: 24px;
+  transition: background-color 0.15s;
+  background-color: transparent;
+}
+
+.valueEditable:hover {
+  background-color: rgba(110, 118, 129, 0.1);
+}
+
+.empty {
+  color: #484f58;
+}
+
+.input {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #c9d1d9;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inputTextarea {
+  min-height: 80px;
+  resize: vertical;
+}

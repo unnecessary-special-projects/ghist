@@ -1,0 +1,62 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  width: 100%;
+  flex: 1;
+  align-items: center;
+}
+
+.group {
+  background-color: #161b22;
+  border-radius: 8px;
+  border: 1px solid #21262d;
+  transition: border-color 0.15s;
+  width: 800px;
+}
+
+.groupOver {
+  /* border-color set inline via STATUS_COLORS */
+}
+
+.groupEmpty {
+  opacity: 0.4;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #21262d;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.groupLabel {
+  font-weight: 600;
+  font-size: 14px;
+  color: #c9d1d9;
+}
+
+.count {
+  margin-left: auto;
+  font-size: 12px;
+  color: #768390;
+  background-color: #21262d;
+  border-radius: 10px;
+  padding: 2px 8px;
+}
+
+.cards {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
