@@ -3,6 +3,7 @@ import css from "./index.module.css";
 import type { Event, EventType, Task } from "../../types";
 import { EVENT_TYPES, EVENT_TYPE_LABELS, EVENT_TYPE_COLORS } from "../../types";
 import * as api from "../../api/client";
+import { useSSE } from "../../hooks/useSSE";
 
 interface IActivityFeed {
   tasks: Task[];
@@ -22,6 +23,8 @@ export const ActivityFeed: React.FC<IActivityFeed> = ({ tasks }) => {
   useEffect(() => {
     loadEvents();
   }, [loadEvents]);
+
+  useSSE(loadEvents);
 
   const handleSubmit = async () => {
     if (!message.trim()) return;

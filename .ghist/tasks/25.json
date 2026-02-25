@@ -1,0 +1,15 @@
+{
+  "id": 25,
+  "title": "Update module path to unnecessary-special-projects org",
+  "description": "",
+  "plan": "",
+  "status": "in_progress",
+  "milestone": "v0.1",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "chore",
+  "ref_id": "GHST-25",
+  "legacy_id": "",
+  "created_at": "2026-02-24T21:33:54Z",
+  "updated_at": "2026-02-24T21:35:40Z"
+}

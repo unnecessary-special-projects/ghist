@@ -1,0 +1,15 @@
+{
+  "id": 31,
+  "title": "README rewrite with new positioning and scenarios",
+  "description": "",
+  "plan": "",
+  "status": "in_progress",
+  "milestone": "v0.1",
+  "commit_hash": "",
+  "priority": "medium",
+  "type": "chore",
+  "ref_id": "GHST-31",
+  "legacy_id": "",
+  "created_at": "2026-02-24T21:33:54Z",
+  "updated_at": "2026-02-24T21:35:40Z"
+}

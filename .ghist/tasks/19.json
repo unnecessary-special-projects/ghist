@@ -1,0 +1,15 @@
+{
+  "id": 19,
+  "title": "Add CSV import command",
+  "description": "",
+  "plan": "",
+  "status": "todo",
+  "milestone": "v0.3",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "feature",
+  "ref_id": "GHST-19",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:39Z",
+  "updated_at": "2026-02-24T16:04:39Z"
+}

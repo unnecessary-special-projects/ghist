@@ -6,33 +6,12 @@ import (
 
 func newTestStore(t *testing.T) *Store {
 	t.Helper()
-	s, err := Open(":memory:")
+	s, err := Open(t.TempDir())
 	if err != nil {
 		t.Fatalf("opening test store: %v", err)
 	}
 	t.Cleanup(func() { s.Close() })
 	return s
-}
-
-func TestMigration(t *testing.T) {
-	s := newTestStore(t)
-	// Verify schema_version
-	var version int
-	err := s.db.QueryRow("SELECT version FROM schema_version").Scan(&version)
-	if err != nil {
-		t.Fatalf("reading schema version: %v", err)
-	}
-	if version != 3 {
-		t.Errorf("expected version 3, got %d", version)
-	}
-}
-
-func TestMigrationIdempotent(t *testing.T) {
-	s := newTestStore(t)
-	// Running migrate again should not error
-	if err := s.migrate(); err != nil {
-		t.Fatalf("second migration failed: %v", err)
-	}
 }
 
 // --- Task tests ---
@@ -220,11 +199,9 @@ func TestMilestoneInfo(t *testing.T) {
 	}
 }
 
-// --- V3 Migration tests ---
-
-func TestMigrationV3NewColumns(t *testing.T) {
+func TestTaskNewFields(t *testing.T) {
 	s := newTestStore(t)
-	task, err := s.CreateTask(CreateTaskInput{Title: "V3 test", Priority: "high", Type: "bug"})
+	task, err := s.CreateTask(CreateTaskInput{Title: "Fields test", Priority: "high", Type: "bug"})
 	if err != nil {
 		t.Fatalf("creating task with new fields: %v", err)
 	}

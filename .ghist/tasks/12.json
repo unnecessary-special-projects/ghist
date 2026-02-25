@@ -1,0 +1,15 @@
+{
+  "id": 12,
+  "title": "Global activity feed",
+  "description": "",
+  "plan": "",
+  "status": "todo",
+  "milestone": "v0.2",
+  "commit_hash": "",
+  "priority": "medium",
+  "type": "feature",
+  "ref_id": "GHST-12",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:25Z",
+  "updated_at": "2026-02-24T21:35:40Z"
+}

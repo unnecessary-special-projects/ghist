@@ -1,94 +1,22 @@
 package store
 
 import (
-	"database/sql"
+	"encoding/json"
 	"fmt"
-	"strings"
+	"os"
+	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/unnecessary-special-projects/ghist/internal/models"
 )
 
-const taskColumns = `id, title, description, plan, status, milestone, commit_hash, priority, type, ref_id, legacy_id, created_at, updated_at`
-
+// CreateTaskInput holds the fields needed to create a new task.
 type CreateTaskInput struct {
 	Title, Description, Status, Milestone, Priority, Type, LegacyID string
 }
 
-func (s *Store) CreateTask(in CreateTaskInput) (*models.Task, error) {
-	if in.Status == "" {
-		in.Status = "todo"
-	}
-	now := time.Now().UTC().Format(time.RFC3339)
-	result, err := s.db.Exec(
-		`INSERT INTO tasks (title, description, status, milestone, priority, type, legacy_id, created_at, updated_at)
-		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		in.Title, in.Description, in.Status, in.Milestone, in.Priority, in.Type, in.LegacyID, now, now,
-	)
-	if err != nil {
-		return nil, fmt.Errorf("inserting task: %w", err)
-	}
-	id, err := result.LastInsertId()
-	if err != nil {
-		return nil, fmt.Errorf("getting last insert id: %w", err)
-	}
-	// Backfill ref_id
-	refID := fmt.Sprintf("GHST-%d", id)
-	if _, err := s.db.Exec(`UPDATE tasks SET ref_id = ? WHERE id = ?`, refID, id); err != nil {
-		return nil, fmt.Errorf("setting ref_id: %w", err)
-	}
-	return s.GetTask(id)
-}
-
-func (s *Store) GetTask(id int64) (*models.Task, error) {
-	row := s.db.QueryRow(`SELECT `+taskColumns+` FROM tasks WHERE id = ?`, id)
-	return scanTask(row)
-}
-
-func (s *Store) ListTasks(status, milestone, priority, taskType string) ([]models.Task, error) {
-	query := `SELECT ` + taskColumns + ` FROM tasks`
-	var conditions []string
-	var args []any
-
-	if status != "" {
-		conditions = append(conditions, "status = ?")
-		args = append(args, status)
-	}
-	if milestone != "" {
-		conditions = append(conditions, "milestone = ?")
-		args = append(args, milestone)
-	}
-	if priority != "" {
-		conditions = append(conditions, "priority = ?")
-		args = append(args, priority)
-	}
-	if taskType != "" {
-		conditions = append(conditions, "type = ?")
-		args = append(args, taskType)
-	}
-
-	if len(conditions) > 0 {
-		query += " WHERE " + strings.Join(conditions, " AND ")
-	}
-	query += " ORDER BY id ASC"
-
-	rows, err := s.db.Query(query, args...)
-	if err != nil {
-		return nil, fmt.Errorf("listing tasks: %w", err)
-	}
-	defer rows.Close()
-
-	var tasks []models.Task
-	for rows.Next() {
-		t, err := scanTaskRow(rows)
-		if err != nil {
-			return nil, err
-		}
-		tasks = append(tasks, *t)
-	}
-	return tasks, rows.Err()
-}
-
+// TaskUpdate holds optional fields to update on an existing task.
 type TaskUpdate struct {
 	Title       *string
 	Description *string
@@ -101,142 +29,206 @@ type TaskUpdate struct {
 	LegacyID    *string
 }
 
-func (s *Store) UpdateTask(id int64, u TaskUpdate) (*models.Task, error) {
-	var sets []string
-	var args []any
+func (s *Store) tasksDir() string {
+	return filepath.Join(s.root, "tasks")
+}
 
-	if u.Title != nil {
-		sets = append(sets, "title = ?")
-		args = append(args, *u.Title)
-	}
-	if u.Description != nil {
-		sets = append(sets, "description = ?")
-		args = append(args, *u.Description)
-	}
-	if u.Plan != nil {
-		sets = append(sets, "plan = ?")
-		args = append(args, *u.Plan)
-	}
-	if u.Status != nil {
-		sets = append(sets, "status = ?")
-		args = append(args, *u.Status)
-	}
-	if u.Milestone != nil {
-		sets = append(sets, "milestone = ?")
-		args = append(args, *u.Milestone)
-	}
-	if u.CommitHash != nil {
-		sets = append(sets, "commit_hash = ?")
-		args = append(args, *u.CommitHash)
-	}
-	if u.Priority != nil {
-		sets = append(sets, "priority = ?")
-		args = append(args, *u.Priority)
-	}
-	if u.Type != nil {
-		sets = append(sets, "type = ?")
-		args = append(args, *u.Type)
-	}
-	if u.LegacyID != nil {
-		sets = append(sets, "legacy_id = ?")
-		args = append(args, *u.LegacyID)
-	}
+func (s *Store) taskPath(id int64) string {
+	return filepath.Join(s.tasksDir(), fmt.Sprintf("%d.json", id))
+}
 
-	if len(sets) == 0 {
-		return s.GetTask(id)
+func (s *Store) CreateTask(in CreateTaskInput) (*models.Task, error) {
+	if in.Status == "" {
+		in.Status = "todo"
 	}
-
-	now := time.Now().UTC().Format(time.RFC3339)
-	sets = append(sets, "updated_at = ?")
-	args = append(args, now)
-	args = append(args, id)
-
-	query := fmt.Sprintf("UPDATE tasks SET %s WHERE id = ?", strings.Join(sets, ", "))
-	result, err := s.db.Exec(query, args...)
+	id, err := nextID(s.tasksDir())
 	if err != nil {
-		return nil, fmt.Errorf("updating task: %w", err)
+		return nil, fmt.Errorf("getting next id: %w", err)
 	}
-	n, _ := result.RowsAffected()
-	if n == 0 {
+	now := time.Now().UTC()
+	t := models.Task{
+		ID:          id,
+		Title:       in.Title,
+		Description: in.Description,
+		Status:      in.Status,
+		Milestone:   in.Milestone,
+		Priority:    in.Priority,
+		Type:        in.Type,
+		LegacyID:    in.LegacyID,
+		RefID:       fmt.Sprintf("GHST-%d", id),
+		CreatedAt:   now,
+		UpdatedAt:   now,
+	}
+	if err := s.writeTask(&t); err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
+func (s *Store) GetTask(id int64) (*models.Task, error) {
+	data, err := os.ReadFile(s.taskPath(id))
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, fmt.Errorf("task not found")
+		}
+		return nil, fmt.Errorf("reading task %d: %w", id, err)
+	}
+	var t models.Task
+	if err := json.Unmarshal(data, &t); err != nil {
+		return nil, fmt.Errorf("parsing task %d: %w", id, err)
+	}
+	return &t, nil
+}
+
+func (s *Store) ListTasks(status, milestone, priority, taskType string) ([]models.Task, error) {
+	entries, err := os.ReadDir(s.tasksDir())
+	if err != nil {
+		return nil, fmt.Errorf("listing tasks: %w", err)
+	}
+
+	var tasks []models.Task
+	for _, e := range entries {
+		if e.IsDir() || filepath.Ext(e.Name()) != ".json" {
+			continue
+		}
+		data, err := os.ReadFile(filepath.Join(s.tasksDir(), e.Name()))
+		if err != nil {
+			return nil, fmt.Errorf("reading task file %s: %w", e.Name(), err)
+		}
+		var t models.Task
+		if err := json.Unmarshal(data, &t); err != nil {
+			return nil, fmt.Errorf("parsing task file %s: %w", e.Name(), err)
+		}
+		if status != "" && t.Status != status {
+			continue
+		}
+		if milestone != "" && t.Milestone != milestone {
+			continue
+		}
+		if priority != "" && t.Priority != priority {
+			continue
+		}
+		if taskType != "" && t.Type != taskType {
+			continue
+		}
+		tasks = append(tasks, t)
+	}
+
+	sort.Slice(tasks, func(i, j int) bool {
+		return tasks[i].ID < tasks[j].ID
+	})
+	return tasks, nil
+}
+
+func (s *Store) UpdateTask(id int64, u TaskUpdate) (*models.Task, error) {
+	t, err := s.GetTask(id)
+	if err != nil {
 		return nil, fmt.Errorf("task %d not found", id)
 	}
-	return s.GetTask(id)
+
+	if u.Title != nil {
+		t.Title = *u.Title
+	}
+	if u.Description != nil {
+		t.Description = *u.Description
+	}
+	if u.Plan != nil {
+		t.Plan = *u.Plan
+	}
+	if u.Status != nil {
+		t.Status = *u.Status
+	}
+	if u.Milestone != nil {
+		t.Milestone = *u.Milestone
+	}
+	if u.CommitHash != nil {
+		t.CommitHash = *u.CommitHash
+	}
+	if u.Priority != nil {
+		t.Priority = *u.Priority
+	}
+	if u.Type != nil {
+		t.Type = *u.Type
+	}
+	if u.LegacyID != nil {
+		t.LegacyID = *u.LegacyID
+	}
+	t.UpdatedAt = time.Now().UTC()
+
+	if err := s.writeTask(t); err != nil {
+		return nil, err
+	}
+	return t, nil
 }
 
 func (s *Store) DeleteTask(id int64) error {
-	result, err := s.db.Exec(`DELETE FROM tasks WHERE id = ?`, id)
-	if err != nil {
-		return fmt.Errorf("deleting task: %w", err)
-	}
-	n, _ := result.RowsAffected()
-	if n == 0 {
+	path := s.taskPath(id)
+	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return fmt.Errorf("task %d not found", id)
 	}
+	if err := os.Remove(path); err != nil {
+		return fmt.Errorf("deleting task %d: %w", id, err)
+	}
+	// Cascade: clear task_id on any events that reference this task.
+	s.clearEventTaskID(id)
 	return nil
 }
 
 func (s *Store) TaskCountsByStatus() (map[string]int, error) {
-	rows, err := s.db.Query(`SELECT status, COUNT(*) FROM tasks GROUP BY status`)
+	tasks, err := s.ListTasks("", "", "", "")
 	if err != nil {
-		return nil, fmt.Errorf("counting tasks by status: %w", err)
+		return nil, err
 	}
-	defer rows.Close()
-
 	counts := make(map[string]int)
-	for rows.Next() {
-		var status string
-		var count int
-		if err := rows.Scan(&status, &count); err != nil {
-			return nil, err
-		}
-		counts[status] = count
+	for _, t := range tasks {
+		counts[t.Status]++
 	}
-	return counts, rows.Err()
+	return counts, nil
 }
 
 func (s *Store) MilestoneInfo() ([]models.MilestoneInfo, error) {
-	rows, err := s.db.Query(`
-		SELECT milestone, COUNT(*) as total,
-		       SUM(CASE WHEN status = 'done' THEN 1 ELSE 0 END) as done
-		FROM tasks
-		WHERE milestone != ''
-		GROUP BY milestone
-		ORDER BY milestone`)
+	tasks, err := s.ListTasks("", "", "", "")
 	if err != nil {
-		return nil, fmt.Errorf("querying milestones: %w", err)
+		return nil, err
 	}
-	defer rows.Close()
 
+	type milestoneData struct {
+		total int
+		done  int
+	}
+	mmap := make(map[string]*milestoneData)
+	var order []string
+	for _, t := range tasks {
+		if t.Milestone == "" {
+			continue
+		}
+		if _, ok := mmap[t.Milestone]; !ok {
+			mmap[t.Milestone] = &milestoneData{}
+			order = append(order, t.Milestone)
+		}
+		mmap[t.Milestone].total++
+		if t.Status == "done" {
+			mmap[t.Milestone].done++
+		}
+	}
+
+	sort.Strings(order)
 	var milestones []models.MilestoneInfo
-	for rows.Next() {
-		var m models.MilestoneInfo
-		if err := rows.Scan(&m.Name, &m.Total, &m.Done); err != nil {
-			return nil, err
-		}
-		milestones = append(milestones, m)
+	for _, name := range order {
+		m := mmap[name]
+		milestones = append(milestones, models.MilestoneInfo{
+			Name:  name,
+			Total: m.total,
+			Done:  m.done,
+		})
 	}
-	return milestones, rows.Err()
+	return milestones, nil
 }
 
-type scanner interface {
-	Scan(dest ...any) error
-}
-
-func scanTask(row scanner) (*models.Task, error) {
-	var t models.Task
-	var createdAt, updatedAt string
-	err := row.Scan(&t.ID, &t.Title, &t.Description, &t.Plan, &t.Status, &t.Milestone, &t.CommitHash, &t.Priority, &t.Type, &t.RefID, &t.LegacyID, &createdAt, &updatedAt)
+func (s *Store) writeTask(t *models.Task) error {
+	data, err := json.MarshalIndent(t, "", "  ")
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("task not found")
-		}
-		return nil, fmt.Errorf("scanning task: %w", err)
+		return fmt.Errorf("marshaling task: %w", err)
 	}
-	t.CreatedAt, _ = time.Parse(time.RFC3339, createdAt)
-	t.UpdatedAt, _ = time.Parse(time.RFC3339, updatedAt)
-	return &t, nil
-}
-
-func scanTaskRow(rows *sql.Rows) (*models.Task, error) {
-	return scanTask(rows)
+	return os.WriteFile(s.taskPath(t.ID), data, 0644)
 }

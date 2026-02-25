@@ -5,28 +5,36 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/unnecessary-special-projects/ghist/internal/store"
 )
 
 type Server struct {
-	store     *store.Store
-	mux       *http.ServeMux
-	webFS     fs.FS
-	devMode   bool
-	repoURL   string
+	store   *store.Store
+	mux     *http.ServeMux
+	webFS   fs.FS
+	devMode bool
+	repoURL string
+	hub     *hub
 }
 
-func NewServer(s *store.Store, webFS fs.FS, devMode bool, repoURL string) *Server {
+func NewServer(s *store.Store, ghistDir string, webFS fs.FS, devMode bool, repoURL string) *Server {
+	h := newHub()
 	srv := &Server{
 		store:   s,
 		mux:     http.NewServeMux(),
 		webFS:   webFS,
 		devMode: devMode,
 		repoURL: repoURL,
+		hub:     h,
 	}
 	srv.routes()
+	go watchDirs(h, []string{
+		filepath.Join(ghistDir, "tasks"),
+		filepath.Join(ghistDir, "events"),
+	})
 	return srv
 }
 
@@ -46,6 +54,7 @@ func (s *Server) routes() {
 	s.mux.HandleFunc("GET /api/tasks/{id}/events", s.handleListTaskEvents)
 	s.mux.HandleFunc("GET /api/status", s.handleStatus)
 	s.mux.HandleFunc("GET /api/config", s.handleConfig)
+	s.mux.HandleFunc("GET /api/events/stream", s.handleSSE)
 
 	// Serve frontend (embedded or dev proxy)
 	if s.webFS != nil {

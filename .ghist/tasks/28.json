@@ -1,0 +1,15 @@
+{
+  "id": 28,
+  "title": "Claude Code commit hook for auto commit linking",
+  "description": "",
+  "plan": "",
+  "status": "done",
+  "milestone": "v0.2",
+  "commit_hash": "40607ee0ab39c0332fcb2d43ca3ba7974e327a7e",
+  "priority": "high",
+  "type": "feature",
+  "ref_id": "GHST-28",
+  "legacy_id": "",
+  "created_at": "2026-02-24T21:33:54Z",
+  "updated_at": "2026-02-24T21:51:21Z"
+}

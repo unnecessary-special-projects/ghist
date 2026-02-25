@@ -1,0 +1,15 @@
+{
+  "id": 10,
+  "title": "Add markdown rendering for task plans",
+  "description": "",
+  "plan": "## Summary\nAdd a markdown renderer to the task plan tab so agents and users can write plans in markdown and see them rendered with proper formatting — headings, code blocks, lists, and inline code.\n\n## Current behaviour\nThe plan tab shows raw markdown as plain text in a textarea. Switching to \"Preview\" mode has no rendering.\n\n## Approach\nUse `marked` for parsing and `DOMPurify` for sanitisation. Render into a styled `div` using `dangerouslySetInnerHTML`. Apply prose styles scoped to the component so they don't bleed into the rest of the UI.\n\nNo heavy dependencies — `marked` is 47kb and `DOMPurify` is 20kb. Both are well-maintained.\n\n## Implementation steps\n\n1. **Install dependencies**\n   ```bash\n   cd web \u0026\u0026 npm install marked dompurify\n   npm install --save-dev @types/dompurify\n   ```\n\n2. **Update `MarkdownPreview` component** (`web/src/components/markdown-preview/index.tsx`)\n   - Import `marked` and `DOMPurify`\n   - Parse markdown with `marked.parse(content)`\n   - Sanitise with `DOMPurify.sanitize(html)`\n   - Render with `dangerouslySetInnerHTML`\n\n3. **Add prose styles** (`web/src/components/markdown-preview/index.module.css`)\n   - Style `h1`–`h3`, `p`, `ul`, `ol`, `li`, `code`, `pre`, `blockquote`\n   - Match the existing dark theme (`#c9d1d9` body, `#0d1117` code bg)\n\n4. **Wire up in task drawer** (`web/src/components/task-drawer/index.tsx`)\n   - The `PlanTab` already uses `\u003cMarkdownPreview content={task.plan} /\u003e` — no changes needed once the component is updated\n\n## Files to change\n- `web/src/components/markdown-preview/index.tsx`\n- `web/src/components/markdown-preview/index.module.css`\n- `web/package.json` + `web/package-lock.json`\n\n## Risk\nLow. Changes are isolated to the markdown preview component. Existing edit flow is unchanged.\n",
+  "status": "todo",
+  "milestone": "v0.2",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "feature",
+  "ref_id": "GHST-10",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:25Z",
+  "updated_at": "2026-02-24T21:35:40Z"
+}

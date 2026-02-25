@@ -1,0 +1,15 @@
+{
+  "id": 9,
+  "title": "Build kanban board UI",
+  "description": "",
+  "plan": "",
+  "status": "done",
+  "milestone": "v0.1",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "feature",
+  "ref_id": "GHST-9",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:17Z",
+  "updated_at": "2026-02-24T16:04:17Z"
+}

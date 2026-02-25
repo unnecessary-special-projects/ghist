@@ -1,0 +1,15 @@
+{
+  "id": 26,
+  "title": "GitHub Actions release workflow",
+  "description": "",
+  "plan": "",
+  "status": "in_progress",
+  "milestone": "v0.1",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "chore",
+  "ref_id": "GHST-26",
+  "legacy_id": "",
+  "created_at": "2026-02-24T21:33:54Z",
+  "updated_at": "2026-02-24T21:35:40Z"
+}

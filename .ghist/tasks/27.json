@@ -1,0 +1,15 @@
+{
+  "id": 27,
+  "title": "Clickable commit hash linking to GitHub",
+  "description": "",
+  "plan": "",
+  "status": "in_progress",
+  "milestone": "v0.2",
+  "commit_hash": "e6dbdef69c0c87c3adf895eb189f13466942af99",
+  "priority": "low",
+  "type": "improvement",
+  "ref_id": "GHST-27",
+  "legacy_id": "",
+  "created_at": "2026-02-24T21:33:54Z",
+  "updated_at": "2026-02-24T21:47:45Z"
+}

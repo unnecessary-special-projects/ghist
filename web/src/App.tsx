@@ -8,6 +8,7 @@ import type { AppView } from './components/header';
 import { Toolbar } from './components/toolbar';
 import { ActivityFeed } from './components/activity-feed';
 import { useTaskFilters } from './hooks/useTaskFilters';
+import { useSSE } from './hooks/useSSE';
 import type { Task, TaskStatus, TaskPriority, TaskType } from './types';
 import * as api from './api/client';
 
@@ -35,6 +36,8 @@ export function App() {
     loadTasks();
     api.getConfig().then((c) => setRepoURL(c.github_repo_url)).catch(() => {});
   }, [loadTasks]);
+
+  useSSE(loadTasks);
 
   const handleStatusChange = async (id: number, status: TaskStatus) => {
     // Optimistic update

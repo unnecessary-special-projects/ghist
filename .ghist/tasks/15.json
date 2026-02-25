@@ -1,0 +1,15 @@
+{
+  "id": 15,
+  "title": "Publish Homebrew tap formula",
+  "description": "",
+  "plan": "",
+  "status": "todo",
+  "milestone": "v0.2",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "chore",
+  "ref_id": "GHST-15",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:38Z",
+  "updated_at": "2026-02-24T16:04:38Z"
+}

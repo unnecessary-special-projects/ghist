@@ -36,7 +36,7 @@ It's a good fit for indie developers, small teams, and solo AI-assisted projects
 - **Plans survive sessions.** Write a plan before a session ends and the next agent picks up exactly where you left off
 - **Decisions get captured.** Log the reasoning behind choices so future sessions don't re-debate the same trade-offs
 
-No cloud. No accounts. Just a SQLite database in `.ghist/` and a CLI your agent already knows how to use.
+No cloud. No accounts. Just plain JSON files in `.ghist/` and a CLI your agent already knows how to use.
 
 ## Quickstart
 
@@ -74,11 +74,19 @@ Then open `http://localhost:4777`.
 brew upgrade ghist
 ```
 
-After upgrading, run `ghist refresh` in your project to apply any new migrations and pick up new optional features:
+After upgrading, run `ghist refresh` in your project to pick up new optional features:
 
 ```bash
 ghist refresh
 ```
+
+#### Migrating from v0.1 (SQLite → JSON)
+
+The first release stored data in a single `ghist.sqlite` binary file. This caused problems on teams — SQLite files can't be merged by Git, so tasks created on different branches would collide or get lost.
+
+Starting in v0.2, ghist stores each task and event as an individual JSON file. This makes branching and merging work naturally: a new task on one branch is just a new file, so two branches diverge and merge cleanly with no conflicts.
+
+**Migration is automatic.** The first time you run any ghist command after upgrading, it detects the old `ghist.sqlite`, exports all your data to JSON files, and renames the original to `ghist.sqlite.bak` as a backup. Nothing is lost.
 
 ## In Practice
 
@@ -146,12 +154,17 @@ ghist log "Using JWT over sessions, simpler for stateless API" --type decision -
 ```
 your-project/
   .ghist/
-    ghist.sqlite          # source of truth — tasks, events, timeline
-    current_context.json  # fast-cache updated after every mutation
+    tasks/
+      1.json              # one file per task
+      2.json
+    events/
+      1.json              # one file per event
+    opportunities/
+    current_context.json  # snapshot updated after every mutation
   CLAUDE.md               # injected instructions for the AI agent
 ```
 
-Ghist stores everything in a local SQLite database. After every mutation (task update, log entry), it writes a `current_context.json` snapshot so agents can quickly understand the current state without querying the DB directly.
+Each task and event is a plain JSON file. This means branches and merges work naturally — a new task on one branch is a new file, so two branches never conflict on the same record. After every mutation, ghist also writes a `current_context.json` snapshot so agents can read the current state in a single file without scanning the directory.
 
 The CLI is the primary interface — both for you and for the AI agent. Agents interact with ghist through the same commands you do.
 
@@ -290,7 +303,7 @@ make test
 
 Single binary. No CGO. No external dependencies at runtime.
 
-- **Go** — CLI (Cobra), HTTP API (stdlib `net/http`), SQLite (`modernc.org/sqlite`)
+- **Go** — CLI (Cobra), HTTP API (stdlib `net/http`), JSON file store
 - **React** — Web UI (Vite, TypeScript, `@dnd-kit` for drag-and-drop)
 - **`//go:embed`** — Skills and web frontend are embedded in the binary
 
@@ -298,7 +311,7 @@ Single binary. No CGO. No external dependencies at runtime.
 main.go                    # Entry point, embeds skills/ and web/dist/
 cmd/                       # CLI commands (Cobra)
 internal/
-  store/                   # SQLite layer (migrations, CRUD)
+  store/                   # JSON file store (CRUD, SQLite migration)
   project/                 # Project detection, init, context updates
   api/                     # HTTP REST API + SPA serving
   models/                  # Data models

@@ -1,0 +1,15 @@
+{
+  "id": 21,
+  "title": "Investigate SQLite performance on large repos",
+  "description": "",
+  "plan": "",
+  "status": "blocked",
+  "milestone": "v0.3",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "chore",
+  "ref_id": "GHST-21",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:43Z",
+  "updated_at": "2026-02-24T16:04:43Z"
+}

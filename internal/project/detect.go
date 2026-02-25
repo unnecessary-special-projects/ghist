@@ -36,8 +36,24 @@ func FindRoot(startDir string) (string, error) {
 }
 
 // DBPath returns the full path to the SQLite database given a project root.
+// Retained for use in migration code only.
 func DBPath(root string) string {
 	return filepath.Join(root, GhistDir, DBFile)
+}
+
+// TasksDir returns the full path to the tasks directory given a project root.
+func TasksDir(root string) string {
+	return filepath.Join(root, GhistDir, "tasks")
+}
+
+// EventsDir returns the full path to the events directory given a project root.
+func EventsDir(root string) string {
+	return filepath.Join(root, GhistDir, "events")
+}
+
+// OpportunitiesDir returns the full path to the opportunities directory given a project root.
+func OpportunitiesDir(root string) string {
+	return filepath.Join(root, GhistDir, "opportunities")
 }
 
 // ContextPath returns the full path to current_context.json given a project root.

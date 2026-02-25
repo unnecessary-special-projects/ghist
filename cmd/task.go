@@ -293,7 +293,7 @@ func openStore() (string, *store.Store, error) {
 		return "", nil, fmt.Errorf("not a ghist project (run 'ghist init' first): %w", err)
 	}
 
-	s, err := store.Open(project.DBPath(root))
+	s, err := store.Open(project.GhistDirPath(root))
 	if err != nil {
 		return "", nil, fmt.Errorf("opening database: %w", err)
 	}

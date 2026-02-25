@@ -87,9 +87,8 @@ func setup(projectRoot string) error {
 		return fmt.Errorf("creating %s: %w", GhistDir, err)
 	}
 
-	// Initialize database (runs any new migrations)
-	dbPath := DBPath(projectRoot)
-	s, err := store.Open(dbPath)
+	// Open the store (also runs SQLite migration if needed).
+	s, err := store.Open(ghistDir)
 	if err != nil {
 		return fmt.Errorf("initializing database: %w", err)
 	}

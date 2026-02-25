@@ -1,0 +1,15 @@
+{
+  "id": 4,
+  "title": "Set up CI/CD pipeline",
+  "description": "",
+  "plan": "",
+  "status": "done",
+  "milestone": "v0.1",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "chore",
+  "ref_id": "GHST-4",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:17Z",
+  "updated_at": "2026-02-24T16:04:17Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": 29,
+  "title": "Styled init flow with gitignore and hook prompts",
+  "description": "",
+  "plan": "",
+  "status": "in_progress",
+  "milestone": "v0.2",
+  "commit_hash": "e6dbdef69c0c87c3adf895eb189f13466942af99",
+  "priority": "medium",
+  "type": "improvement",
+  "ref_id": "GHST-29",
+  "legacy_id": "",
+  "created_at": "2026-02-24T21:33:54Z",
+  "updated_at": "2026-02-24T21:47:45Z"
+}

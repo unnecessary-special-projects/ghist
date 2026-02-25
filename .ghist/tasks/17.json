@@ -1,0 +1,15 @@
+{
+  "id": 17,
+  "title": "Write onboarding documentation",
+  "description": "",
+  "plan": "",
+  "status": "todo",
+  "milestone": "v0.2",
+  "commit_hash": "",
+  "priority": "medium",
+  "type": "chore",
+  "ref_id": "GHST-17",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:38Z",
+  "updated_at": "2026-02-24T16:04:38Z"
+}

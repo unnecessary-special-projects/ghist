@@ -1,0 +1,15 @@
+{
+  "id": 6,
+  "title": "Implement user authentication",
+  "description": "",
+  "plan": "",
+  "status": "done",
+  "milestone": "v0.1",
+  "commit_hash": "",
+  "priority": "urgent",
+  "type": "feature",
+  "ref_id": "GHST-6",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:17Z",
+  "updated_at": "2026-02-24T16:04:17Z"
+}

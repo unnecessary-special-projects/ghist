@@ -1,0 +1,15 @@
+{
+  "id": 14,
+  "title": "Add milestone progress view",
+  "description": "",
+  "plan": "",
+  "status": "todo",
+  "milestone": "v0.2",
+  "commit_hash": "",
+  "priority": "low",
+  "type": "feature",
+  "ref_id": "GHST-14",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:32Z",
+  "updated_at": "2026-02-24T18:43:00Z"
+}

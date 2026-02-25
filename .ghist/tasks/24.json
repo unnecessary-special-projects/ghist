@@ -1,0 +1,15 @@
+{
+  "id": 24,
+  "title": "Homebrew tap release pipeline",
+  "description": "",
+  "plan": "",
+  "status": "in_progress",
+  "milestone": "v0.1",
+  "commit_hash": "",
+  "priority": "high",
+  "type": "chore",
+  "ref_id": "GHST-24",
+  "legacy_id": "",
+  "created_at": "2026-02-24T21:33:54Z",
+  "updated_at": "2026-02-24T21:35:40Z"
+}

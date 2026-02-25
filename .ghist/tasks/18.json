@@ -1,0 +1,15 @@
+{
+  "id": 18,
+  "title": "Support task dependencies",
+  "description": "",
+  "plan": "",
+  "status": "todo",
+  "milestone": "v0.3",
+  "commit_hash": "",
+  "priority": "medium",
+  "type": "feature",
+  "ref_id": "GHST-18",
+  "legacy_id": "",
+  "created_at": "2026-02-24T16:04:38Z",
+  "updated_at": "2026-02-24T16:04:38Z"
+}

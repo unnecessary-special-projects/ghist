@@ -45,7 +45,7 @@ var serveCmd = &cobra.Command{
 		}
 
 		repoURL := project.DetectGitHubRepo(root)
-		srv := api.NewServer(s, frontendFS, dev, repoURL)
+		srv := api.NewServer(s, project.GhistDirPath(root), frontendFS, dev, repoURL)
 		addr := fmt.Sprintf(":%d", port)
 
 		fmt.Printf("ghist server starting on http://localhost:%d\n", port)
