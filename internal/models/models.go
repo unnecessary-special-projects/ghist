@@ -1,6 +1,23 @@
 package models
 
-import "time"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+	"time"
+)
+
+// ParseTaskID accepts a bare numeric ID ("19") or a prefixed ref ("GHST-19")
+// and returns the numeric task ID.
+func ParseTaskID(raw string) (int64, error) {
+	s := strings.TrimSpace(raw)
+	s = strings.TrimPrefix(strings.ToUpper(s), "GHST-")
+	id, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("invalid task id: %s", raw)
+	}
+	return id, nil
+}
 
 type Task struct {
 	ID          int64     `json:"id"`

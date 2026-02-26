@@ -33,7 +33,7 @@ func (s *Server) handleCreateEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleListTaskEvents(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	id, err := models.ParseTaskID(r.PathValue("id"))
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid task id")
 		return

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strconv"
 
+	"github.com/unnecessary-special-projects/ghist/internal/models"
 	"github.com/unnecessary-special-projects/ghist/internal/output"
 	"github.com/unnecessary-special-projects/ghist/internal/project"
 	"github.com/unnecessary-special-projects/ghist/internal/store"
@@ -115,9 +115,9 @@ var taskShowCmd = &cobra.Command{
 		}
 		defer s.Close()
 
-		id, err := strconv.ParseInt(args[0], 10, 64)
+		id, err := models.ParseTaskID(args[0])
 		if err != nil {
-			return fmt.Errorf("invalid task id: %s", args[0])
+			return err
 		}
 
 		task, err := s.GetTask(id)
@@ -148,9 +148,9 @@ var taskUpdateCmd = &cobra.Command{
 		}
 		defer s.Close()
 
-		id, err := strconv.ParseInt(args[0], 10, 64)
+		id, err := models.ParseTaskID(args[0])
 		if err != nil {
-			return fmt.Errorf("invalid task id: %s", args[0])
+			return err
 		}
 
 		u := store.TaskUpdate{}
@@ -228,9 +228,9 @@ var taskDeleteCmd = &cobra.Command{
 		}
 		defer s.Close()
 
-		id, err := strconv.ParseInt(args[0], 10, 64)
+		id, err := models.ParseTaskID(args[0])
 		if err != nil {
-			return fmt.Errorf("invalid task id: %s", args[0])
+			return err
 		}
 
 		if err := s.DeleteTask(id); err != nil {
