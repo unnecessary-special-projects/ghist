@@ -55,6 +55,8 @@ func (s *Server) routes() {
 	s.mux.HandleFunc("GET /api/status", s.handleStatus)
 	s.mux.HandleFunc("GET /api/config", s.handleConfig)
 	s.mux.HandleFunc("GET /api/events/stream", s.handleSSE)
+	s.mux.HandleFunc("GET /api/settings/milestone-order", s.handleGetMilestoneOrder)
+	s.mux.HandleFunc("PUT /api/settings/milestone-order", s.handleSetMilestoneOrder)
 
 	// Serve frontend (embedded or dev proxy)
 	if s.webFS != nil {

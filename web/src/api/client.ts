@@ -89,3 +89,14 @@ export async function getStatus(): Promise<StatusSummary> {
 export async function getConfig(): Promise<{ github_repo_url: string }> {
   return request<{ github_repo_url: string }>('/config');
 }
+
+export async function getMilestoneOrder(): Promise<string[]> {
+  return request<string[]>('/settings/milestone-order');
+}
+
+export async function setMilestoneOrder(order: string[]): Promise<string[]> {
+  return request<string[]>('/settings/milestone-order', {
+    method: 'PUT',
+    body: JSON.stringify(order),
+  });
+}

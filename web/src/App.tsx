@@ -19,6 +19,7 @@ export function App() {
   const [drawerTask, setDrawerTask] = useState<Task | null>(null);
   const [drawerMode, setDrawerMode] = useState<'view' | 'create' | null>(null);
   const [repoURL, setRepoURL] = useState<string>('');
+  const [milestoneOrder, setMilestoneOrder] = useState<string[]>([]);
 
   const {
     viewMode, setViewMode,
@@ -35,12 +36,30 @@ export function App() {
     setTasks(data);
   }, []);
 
-  useEffect(() => {
-    loadTasks();
-    api.getConfig().then((c) => setRepoURL(c.github_repo_url)).catch(() => {});
-  }, [loadTasks]);
+  const loadMilestoneOrder = useCallback(async () => {
+    const order = await api.getMilestoneOrder();
+    setMilestoneOrder(order);
+  }, []);
 
-  useSSE(loadTasks);
+  const handleRefresh = useCallback(async () => {
+    await Promise.all([loadTasks(), loadMilestoneOrder()]);
+  }, [loadTasks, loadMilestoneOrder]);
+
+  useEffect(() => {
+    handleRefresh();
+    api.getConfig().then((c) => setRepoURL(c.github_repo_url)).catch(() => {});
+  }, [handleRefresh]);
+
+  useSSE(handleRefresh);
+
+  const handleMilestoneOrderChange = async (order: string[]) => {
+    setMilestoneOrder(order); // optimistic
+    try {
+      await api.setMilestoneOrder(order);
+    } catch {
+      await loadMilestoneOrder(); // revert
+    }
+  };
 
   const handleStatusChange = async (id: number, status: TaskStatus) => {
     // Optimistic update
@@ -147,6 +166,8 @@ export function App() {
             tasks={tasks}
             milestoneFilter={milestoneFilter}
             onToggleMilestone={toggleMilestone}
+            milestoneOrder={milestoneOrder}
+            onMilestoneOrderChange={handleMilestoneOrderChange}
           />
           {viewMode === 'list' ? (
             <List
@@ -165,6 +186,8 @@ export function App() {
               tasks={filteredTasks}
               onMilestoneChange={handleMilestoneChange}
               onCardClick={handleCardClick}
+              milestoneOrder={milestoneOrder}
+              onMilestoneOrderChange={handleMilestoneOrderChange}
             />
           )}
         </>

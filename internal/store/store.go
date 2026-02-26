@@ -27,6 +27,14 @@ func Open(ghistDir string) (*Store, error) {
 		}
 	}
 
+	// Ensure settings.json exists
+	settingsPath := filepath.Join(ghistDir, "settings.json")
+	if _, err := os.Stat(settingsPath); os.IsNotExist(err) {
+		if err := os.WriteFile(settingsPath, []byte("{}"), 0644); err != nil {
+			return nil, fmt.Errorf("creating settings.json: %w", err)
+		}
+	}
+
 	return &Store{root: ghistDir}, nil
 }
 

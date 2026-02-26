@@ -26,12 +26,34 @@
   opacity: 0.4;
 }
 
+.groupDragging {
+  opacity: 0.4;
+}
+
+.groupOverlay {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  width: 1000px;
+}
+
 .groupHeader {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
   border-bottom: 1px solid #21262d;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  color: #484f58;
+  flex-shrink: 0;
+  touch-action: none;
+}
+
+.dragHandle:hover {
+  color: #768390;
 }
 
 .dot {

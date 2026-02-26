@@ -1,9 +1,26 @@
 import { useMemo } from "react";
 import cx from "classnames";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  arrayMove,
+  horizontalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import css from "./index.module.css";
 import type { Task, TaskPriority, TaskType } from "../../types";
 import { PRIORITIES, PRIORITY_LABELS, TASK_TYPES, TYPE_LABELS } from "../../types";
 import type { ViewMode, SortOption } from "../../hooks/useTaskFilters";
+import { orderMilestones } from "../../utils/milestoneOrder";
+
+const NONE_SENTINEL = "__none__";
 
 export interface IToolbar {
   viewMode: ViewMode;
@@ -19,6 +36,8 @@ export interface IToolbar {
   tasks: Task[];
   milestoneFilter: Set<string>;
   onToggleMilestone: (milestone: string) => void;
+  milestoneOrder: string[];
+  onMilestoneOrderChange: (order: string[]) => void;
 }
 
 const SORT_LABELS: Record<SortOption, string> = {
@@ -29,20 +48,39 @@ const SORT_LABELS: Record<SortOption, string> = {
 };
 
 export const Toolbar: React.FC<IToolbar> = (props) => {
-  const milestones = useMemo(() => {
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
+
+  const rawMilestones = useMemo(() => {
     const set = new Set<string>();
     for (const t of props.tasks) {
       set.add(t.milestone || "");
     }
-    const sorted = [...set].sort((a, b) => {
-      if (a === "") return 1;
-      if (b === "") return -1;
-      return a.localeCompare(b);
-    });
-    return sorted;
+    return [...set];
   }, [props.tasks]);
 
+  const milestones = useMemo(
+    () => orderMilestones(rawMilestones, props.milestoneOrder),
+    [rawMilestones, props.milestoneOrder]
+  );
+
+  const sortableIds = useMemo(
+    () => milestones.map((m) => (m === "" ? NONE_SENTINEL : m)),
+    [milestones]
+  );
+
   const showMilestones = milestones.length > 1 || (milestones.length === 1 && milestones[0] !== "");
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = sortableIds.indexOf(String(active.id));
+    const newIndex = sortableIds.indexOf(String(over.id));
+    if (oldIndex === -1 || newIndex === -1) return;
+    const newMilestones = arrayMove(milestones, oldIndex, newIndex);
+    props.onMilestoneOrderChange(newMilestones);
+  };
 
   return (
     <div>
@@ -114,21 +152,65 @@ export const Toolbar: React.FC<IToolbar> = (props) => {
       </div>
 
       {showMilestones && (
-        <div className={css.milestoneBar}>
-          {milestones.map((m) => {
-            const active = props.milestoneFilter.has(m);
-            return (
-              <button
-                key={m === "" ? "__none__" : m}
-                className={cx(css.chip, { [css.chipActive]: active })}
-                onClick={() => props.onToggleMilestone(m)}
-              >
-                {m === "" ? "No milestone" : m}
-              </button>
-            );
-          })}
-        </div>
+        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+          <SortableContext
+            items={sortableIds}
+            strategy={horizontalListSortingStrategy}
+          >
+            <div className={css.milestoneBar}>
+              {milestones.map((m) => (
+                <SortableChip
+                  key={m === "" ? NONE_SENTINEL : m}
+                  id={m === "" ? NONE_SENTINEL : m}
+                  label={m === "" ? "No milestone" : m}
+                  active={props.milestoneFilter.has(m)}
+                  onClick={() => props.onToggleMilestone(m)}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
     </div>
   );
 };
+
+function SortableChip({
+  id,
+  label,
+  active,
+  onClick,
+}: {
+  id: string;
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.4 : undefined,
+  };
+
+  return (
+    <button
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={cx(css.chip, { [css.chipActive]: active })}
+      onClick={onClick}
+    >
+      {label}
+    </button>
+  );
+}
