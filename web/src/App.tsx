@@ -24,6 +24,8 @@ export function App() {
     priorityFilter, setPriorityFilter,
     typeFilter, setTypeFilter,
     searchQuery, setSearchQuery,
+    sortBy, setSortBy,
+    milestoneFilter, toggleMilestone,
     filterTasks,
   } = useTaskFilters();
 
@@ -126,6 +128,11 @@ export function App() {
             onTypeFilterChange={setTypeFilter}
             searchQuery={searchQuery}
             onSearchQueryChange={setSearchQuery}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            tasks={tasks}
+            milestoneFilter={milestoneFilter}
+            onToggleMilestone={toggleMilestone}
           />
           {viewMode === 'list' ? (
             <List

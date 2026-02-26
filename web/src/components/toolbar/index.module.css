@@ -68,3 +68,34 @@
   outline: none;
   width: 240px;
 }
+
+.milestoneBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 24px;
+  border-bottom: 1px solid #21262d;
+}
+
+.chip {
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid #30363d;
+  background-color: transparent;
+  color: #768390;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.chip:hover {
+  border-color: #58a6ff;
+  color: #c9d1d9;
+}
+
+.chipActive {
+  background-color: #1f6feb33;
+  border-color: #58a6ff;
+  color: #58a6ff;
+}
