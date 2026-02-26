@@ -1,6 +1,6 @@
 # Auto-Completion
 
-Detect when a task is finished, write an implementation note, and ask the user before closing it.
+Detect when a task is finished, write implementation notes on the task, and ask the user before closing it.
 
 ## When to Consider a Task Done
 
@@ -14,15 +14,27 @@ Never assume a task is done. The user decides when to close it.
 
 ## The Completion Flow
 
-### 1. Write an implementation note
+### 1. Update the task plan with implementation notes
 
-Before asking the user, log a short summary of what was done — what changed, what approach was taken, and any relevant trade-offs. Keep it brief.
+Before asking the user, **update the plan on the task** to include a summary of what was done. This keeps the full history — plan and outcome — on the task itself, not just in the event log.
+
+Read the current plan, append an "Implementation Notes" section, and save it back:
 
 ```
-ghist log "Implemented JWT middleware in internal/auth. Chose stateless tokens over sessions to keep the API simple. Added tests for expiry and invalid signature cases." --type decision --task <id>
+cat <<'EOF' | ghist task update <id> --plan-stdin
+<existing plan content here>
+
+## Implementation Notes
+- Implemented JWT middleware in internal/auth
+- Chose stateless tokens over sessions to keep the API simple
+- Added tests for expiry and invalid signature cases
+- Skipped refresh tokens — can add later if needed
+EOF
 ```
 
-### 2. Link the commit if applicable
+**This is mandatory.** Every completed task must have implementation notes saved to the task's plan field.
+
+### 2. Link the commit
 
 ```
 ghist task update <id> --commit-hash abc1234
@@ -32,7 +44,7 @@ ghist task update <id> --commit-hash abc1234
 
 Do not mark the task as done automatically. Instead, ask:
 
-> "I think this is done — the implementation is complete and tests are passing. Should I close the task?"
+> "I've finished the implementation and updated the task with notes. Should I close it?"
 
 Wait for confirmation before proceeding.
 
@@ -44,12 +56,24 @@ Once the user confirms:
 ghist task update <id> --status done
 ```
 
-## Partial Completion
-
-If a task is only partially done, log what was accomplished and keep it in progress:
+Optionally log a brief event for the timeline:
 
 ```
-ghist log "Completed steps 1-3, remaining: step 4 (needs API review)" --task <id>
+ghist log "Completed: <one-line summary>" --task <id>
+```
+
+## Partial Completion
+
+If a task is only partially done, update the plan to reflect progress and keep it in progress:
+
+```
+cat <<'EOF' | ghist task update <id> --plan-stdin
+<existing plan, with completed steps marked>
+
+## Progress Notes
+- Completed steps 1-3
+- Step 4 remaining: needs API review before proceeding
+EOF
 ```
 
 Do not ask the user to close a partially complete task.

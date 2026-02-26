@@ -21,9 +21,9 @@ ghist task update <id> --status in_planning
 
 This signals to other agents (and future sessions) that planning is underway.
 
-### 3. Write a plan
+### 3. Write and save the plan
 
-Before writing code, write an implementation plan and persist it:
+Write an implementation plan and **save it to the task as soon as it's ready**:
 
 ```
 cat <<'EOF' | ghist task update <id> --plan-stdin
@@ -36,47 +36,74 @@ cat <<'EOF' | ghist task update <id> --plan-stdin
 EOF
 ```
 
-The plan is stored on the task and survives session boundaries. If a session
-ends mid-task, the next agent can read the plan and pick up where you left off.
-
-If you update the plan later, use `--plan-stdin` again — it overwrites the existing plan on the same task.
+**This is mandatory.** The plan must live on the task — not just in conversation context — so that any session can pick it up. If the user's agent (e.g. Claude Code) produces a plan through its own planning workflow, save that plan to the task using `--plan-stdin` as soon as it's finalized.
 
 ### 4. Execute
 
-First, move the task to in_progress:
+Move the task to in_progress:
 
 ```
 ghist task update <id> --status in_progress
 ```
 
-Then work through the plan step by step. Log progress as you go:
+Work through the plan step by step. **Keep the plan current on the task** — update it on every meaningful change (new files, different approach, scope change, completed steps) so it always reflects the real state of the work:
 
 ```
-ghist log "Completed step 1: added migration" --task <id>
-ghist log "Step 2 blocked: need API review" --task <id>
+cat <<'EOF' | ghist task update <id> --plan-stdin
+## Approach (revised)
+- Step 1: ... (done)
+- Step 2: ... (done)
+- Step 3: ... (added — discovered during implementation)
+
+## Files changed
+- path/to/file.go — what changed
+- path/to/new_file.go — why it was added
+EOF
 ```
 
 ### 5. Complete
 
-Do not mark the task as done automatically. Instead:
+When the work is done, **append implementation notes to the plan** on the task. This keeps everything about the task — what was planned, what was actually done, and why — in one place.
 
-1. Write a short implementation note summarising what was done:
-   ```
-   ghist log "Brief summary of what was implemented and any key decisions made" --type decision --task <id>
-   ```
+```
+cat <<'EOF' | ghist task update <id> --plan-stdin
+## Approach
+- Step 1: Added migration for new table
+- Step 2: Implemented API endpoint
+- Step 3: Wrote tests
 
-2. Link the commit if applicable:
-   ```
-   ghist task update <id> --commit-hash abc1234
-   ```
+## Files changed
+- internal/store/store.go — added migration
+- internal/api/tasks.go — new endpoint
+- internal/api/tasks_test.go — test coverage
 
-3. Ask the user for confirmation:
-   > "I think this is done — should I close the task?"
+## Implementation Notes
+Went with JWT over sessions to keep the API stateless. Added tests for
+token expiry and invalid signatures. Skipped refresh tokens for now —
+can add in a follow-up if needed.
+EOF
+```
 
-4. Only mark as done once confirmed:
-   ```
-   ghist task update <id> --status done
-   ```
+Then link the commit and ask the user before closing:
+
+```
+ghist task update <id> --commit-hash abc1234
+```
+
+> "I've finished the implementation and updated the task with notes. Should I close it?"
+
+Only mark as done once confirmed:
+
+```
+ghist task update <id> --status done
+```
+
+## Rules
+
+1. **Save plans to the task as soon as they're ready.** Never keep the plan only in conversation. Use `--plan-stdin`.
+2. **Keep the plan current.** Update it on every meaningful change as work progresses.
+3. **Write implementation notes on the task** when done — not just as a log event.
+4. **Ask before closing.** The user decides when a task is done.
 
 ## Why Persist Plans?
 
