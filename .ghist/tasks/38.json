@@ -1,0 +1,15 @@
+{
+  "id": 38,
+  "title": "Related/blocked-by task relationships",
+  "description": "Mark task dependencies like GHST-11 blocks GHST-10 to help sequence work. E.g. ghist task update 11 --blocks 10.",
+  "plan": "",
+  "status": "todo",
+  "milestone": "",
+  "commit_hash": "",
+  "priority": "",
+  "type": "feature",
+  "ref_id": "GHST-38",
+  "legacy_id": "",
+  "created_at": "2026-02-26T15:22:49.589883Z",
+  "updated_at": "2026-02-26T15:22:49.589883Z"
+}

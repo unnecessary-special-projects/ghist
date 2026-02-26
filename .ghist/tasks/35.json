@@ -1,0 +1,15 @@
+{
+  "id": 35,
+  "title": "Bulk task operations",
+  "description": "Support updating multiple tasks at once. E.g. ghist task update 19 20 21 --milestone X or ghist task bulk-move --from \"Accountant Features\" --to \"Add your Accountant\".",
+  "plan": "",
+  "status": "todo",
+  "milestone": "",
+  "commit_hash": "",
+  "priority": "",
+  "type": "feature",
+  "ref_id": "GHST-35",
+  "legacy_id": "",
+  "created_at": "2026-02-26T15:22:49.558986Z",
+  "updated_at": "2026-02-26T15:22:49.558986Z"
+}

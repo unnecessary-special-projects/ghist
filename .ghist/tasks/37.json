@@ -1,0 +1,15 @@
+{
+  "id": 37,
+  "title": "File paths on tasks",
+  "description": "Allow attaching relevant file paths to a task. E.g. ghist task update 1 --files \"libs/ui-core/src/workbenches/transaction.tsx\". Helps orient next session.",
+  "plan": "",
+  "status": "todo",
+  "milestone": "",
+  "commit_hash": "",
+  "priority": "",
+  "type": "feature",
+  "ref_id": "GHST-37",
+  "legacy_id": "",
+  "created_at": "2026-02-26T15:22:49.579702Z",
+  "updated_at": "2026-02-26T15:22:49.579702Z"
+}

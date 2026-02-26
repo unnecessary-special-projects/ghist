@@ -509,6 +509,66 @@
       "legacy_id": "",
       "created_at": "2026-02-26T15:14:44.760108Z",
       "updated_at": "2026-02-26T15:14:44.760108Z"
+    },
+    {
+      "id": 35,
+      "title": "Bulk task operations",
+      "description": "Support updating multiple tasks at once. E.g. ghist task update 19 20 21 --milestone X or ghist task bulk-move --from \"Accountant Features\" --to \"Add your Accountant\".",
+      "plan": "",
+      "status": "todo",
+      "milestone": "",
+      "commit_hash": "",
+      "priority": "",
+      "type": "feature",
+      "ref_id": "GHST-35",
+      "legacy_id": "",
+      "created_at": "2026-02-26T15:22:49.558986Z",
+      "updated_at": "2026-02-26T15:22:49.558986Z"
+    },
+    {
+      "id": 36,
+      "title": "Verbose task list (--verbose flag)",
+      "description": "Add --verbose flag to ghist task list that shows a one-line description (first 80 chars) so you don't have to ghist task show each one.",
+      "plan": "",
+      "status": "todo",
+      "milestone": "",
+      "commit_hash": "",
+      "priority": "",
+      "type": "improvement",
+      "ref_id": "GHST-36",
+      "legacy_id": "",
+      "created_at": "2026-02-26T15:22:49.569619Z",
+      "updated_at": "2026-02-26T15:22:49.569619Z"
+    },
+    {
+      "id": 37,
+      "title": "File paths on tasks",
+      "description": "Allow attaching relevant file paths to a task. E.g. ghist task update 1 --files \"libs/ui-core/src/workbenches/transaction.tsx\". Helps orient next session.",
+      "plan": "",
+      "status": "todo",
+      "milestone": "",
+      "commit_hash": "",
+      "priority": "",
+      "type": "feature",
+      "ref_id": "GHST-37",
+      "legacy_id": "",
+      "created_at": "2026-02-26T15:22:49.579702Z",
+      "updated_at": "2026-02-26T15:22:49.579702Z"
+    },
+    {
+      "id": 38,
+      "title": "Related/blocked-by task relationships",
+      "description": "Mark task dependencies like GHST-11 blocks GHST-10 to help sequence work. E.g. ghist task update 11 --blocks 10.",
+      "plan": "",
+      "status": "todo",
+      "milestone": "",
+      "commit_hash": "",
+      "priority": "",
+      "type": "feature",
+      "ref_id": "GHST-38",
+      "legacy_id": "",
+      "created_at": "2026-02-26T15:22:49.589883Z",
+      "updated_at": "2026-02-26T15:22:49.589883Z"
     }
   ],
   "recent_events": [
@@ -530,12 +590,12 @@
     }
   ],
   "summary": {
-    "total_tasks": 34,
+    "total_tasks": 38,
     "tasks_by_status": {
       "blocked": 1,
       "done": 8,
       "in_progress": 9,
-      "todo": 16
+      "todo": 20
     },
     "milestones": [
       {

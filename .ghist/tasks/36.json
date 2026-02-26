@@ -1,0 +1,15 @@
+{
+  "id": 36,
+  "title": "Verbose task list (--verbose flag)",
+  "description": "Add --verbose flag to ghist task list that shows a one-line description (first 80 chars) so you don't have to ghist task show each one.",
+  "plan": "",
+  "status": "todo",
+  "milestone": "",
+  "commit_hash": "",
+  "priority": "",
+  "type": "improvement",
+  "ref_id": "GHST-36",
+  "legacy_id": "",
+  "created_at": "2026-02-26T15:22:49.569619Z",
+  "updated_at": "2026-02-26T15:22:49.569619Z"
+}
