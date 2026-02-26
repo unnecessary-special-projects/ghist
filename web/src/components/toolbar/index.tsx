@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import cx from "classnames";
-import { List, Columns } from "@phosphor-icons/react";
 import css from "./index.module.css";
 import type { Task, TaskPriority, TaskType } from "../../types";
 import { PRIORITIES, PRIORITY_LABELS, TASK_TYPES, TYPE_LABELS } from "../../types";
@@ -53,16 +52,20 @@ export const Toolbar: React.FC<IToolbar> = (props) => {
             <button
               className={cx(css.segBtn, { [css.segBtnActive]: props.viewMode === "list" })}
               onClick={() => props.onViewModeChange("list")}
-              title="List view"
             >
-              <List size={18} weight="duotone" />
+              List
             </button>
             <button
               className={cx(css.segBtn, { [css.segBtnActive]: props.viewMode === "board" })}
               onClick={() => props.onViewModeChange("board")}
-              title="Board view"
             >
-              <Columns size={18} weight="duotone" />
+              Board
+            </button>
+            <button
+              className={cx(css.segBtn, { [css.segBtnActive]: props.viewMode === "plan" })}
+              onClick={() => props.onViewModeChange("plan")}
+            >
+              Plan
             </button>
           </div>
         </div>

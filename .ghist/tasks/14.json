@@ -2,8 +2,8 @@
   "id": 14,
   "title": "Add milestone progress view",
   "description": "",
-  "plan": "",
-  "status": "todo",
+  "plan": "## Implementation Notes\n\nAdded a **Plan view** to the web UI — a third view mode (alongside List and Board) that groups tasks by milestone for planning-oriented layout with drag-and-drop to move tasks between milestones.\n\n### Files Modified\n- `web/src/hooks/useTaskFilters.ts` — Extended `ViewMode` type to include `'plan'`\n- `web/src/components/toolbar/index.tsx` — Replaced Phosphor icon buttons with text labels (List / Board / Plan), removed `@phosphor-icons/react` import\n- `web/src/components/toolbar/index.module.css` — Updated `.segBtn` padding/font-size for text labels\n- `web/src/App.tsx` — Added `PlanView` import, `handleMilestoneChange` handler (optimistic update pattern), and conditional rendering for plan view mode\n\n### Files Created\n- `web/src/components/plan-view/index.tsx` — Plan view component using same DnD pattern as List view (`DndContext`, `PointerSensor`, `useDroppable`, `DragOverlay`). Groups tasks by milestone (sorted alphabetically, \"No milestone\" last). Each card has a colored status dot since tasks aren't grouped by status.\n- `web/src/components/plan-view/index.module.css` — Styles based on List view layout (centered 800px groups), purple (#d2a8ff) milestone dots, `.cardRow`/`.statusDot`/`.cardWrapper` for status indicator layout.\n\n### Key Design Decisions\n- Used `__none__` sentinel string as droppable ID for the no-milestone group (maps back to empty string on drop)\n- Status dots are rendered in the Plan view's card wrapper (not in shared TaskCard) to keep TaskCard unchanged\n- `handleMilestoneChange` follows same optimistic-update-then-reload pattern as `handleStatusChange`\n",
+  "status": "done",
   "milestone": "v0.2",
   "commit_hash": "",
   "priority": "low",
@@ -11,5 +11,5 @@
   "ref_id": "GHST-14",
   "legacy_id": "",
   "created_at": "2026-02-24T16:04:32Z",
-  "updated_at": "2026-02-24T18:43:00Z"
+  "updated_at": "2026-02-26T15:22:02.342003Z"
 }

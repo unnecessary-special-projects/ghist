@@ -1,0 +1,15 @@
+{
+  "id": 33,
+  "title": "Accept GHST-XX prefixed task IDs across CLI and API",
+  "description": "Added ParseTaskID helper in models package that strips the GHST- prefix before parsing. Updated all 3 CLI commands (show, update, delete) and all 4 API handlers to use it.",
+  "plan": "",
+  "status": "todo",
+  "milestone": "",
+  "commit_hash": "",
+  "priority": "",
+  "type": "improvement",
+  "ref_id": "GHST-33",
+  "legacy_id": "",
+  "created_at": "2026-02-26T15:14:44.750315Z",
+  "updated_at": "2026-02-26T15:14:44.750315Z"
+}

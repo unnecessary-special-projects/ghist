@@ -1,0 +1,15 @@
+{
+  "id": 32,
+  "title": "Add sorting and milestone filtering to web UI",
+  "description": "Added 4 sort options (newest, updated, priority, title) and toggleable milestone chip filters to both List and Board views. All client-side in useTaskFilters.",
+  "plan": "",
+  "status": "todo",
+  "milestone": "",
+  "commit_hash": "",
+  "priority": "",
+  "type": "feature",
+  "ref_id": "GHST-32",
+  "legacy_id": "",
+  "created_at": "2026-02-26T15:14:44.740206Z",
+  "updated_at": "2026-02-26T15:14:44.740206Z"
+}

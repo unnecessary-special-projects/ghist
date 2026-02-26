@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import css from './App.module.css';
 import { List } from './components/list';
 import { Board } from './components/board';
+import { PlanView } from './components/plan-view';
 import { TaskDrawer } from './components/task-drawer';
 import { Header } from './components/header';
 import type { AppView } from './components/header';
@@ -52,6 +53,19 @@ export function App() {
       await loadTasks();
     } catch {
       await loadTasks(); // revert
+    }
+  };
+
+  const handleMilestoneChange = async (id: number, milestone: string) => {
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, milestone } : t)));
+    if (drawerTask?.id === id) {
+      setDrawerTask((prev) => prev ? { ...prev, milestone } : null);
+    }
+    try {
+      await api.updateTask(id, { milestone });
+      await loadTasks();
+    } catch {
+      await loadTasks();
     }
   };
 
@@ -140,10 +154,16 @@ export function App() {
               onStatusChange={handleStatusChange}
               onCardClick={handleCardClick}
             />
-          ) : (
+          ) : viewMode === 'board' ? (
             <Board
               tasks={filteredTasks}
               onStatusChange={handleStatusChange}
+              onCardClick={handleCardClick}
+            />
+          ) : (
+            <PlanView
+              tasks={filteredTasks}
+              onMilestoneChange={handleMilestoneChange}
               onCardClick={handleCardClick}
             />
           )}

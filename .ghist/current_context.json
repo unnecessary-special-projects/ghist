@@ -199,8 +199,8 @@
       "id": 14,
       "title": "Add milestone progress view",
       "description": "",
-      "plan": "",
-      "status": "todo",
+      "plan": "## Implementation Notes\n\nAdded a **Plan view** to the web UI — a third view mode (alongside List and Board) that groups tasks by milestone for planning-oriented layout with drag-and-drop to move tasks between milestones.\n\n### Files Modified\n- `web/src/hooks/useTaskFilters.ts` — Extended `ViewMode` type to include `'plan'`\n- `web/src/components/toolbar/index.tsx` — Replaced Phosphor icon buttons with text labels (List / Board / Plan), removed `@phosphor-icons/react` import\n- `web/src/components/toolbar/index.module.css` — Updated `.segBtn` padding/font-size for text labels\n- `web/src/App.tsx` — Added `PlanView` import, `handleMilestoneChange` handler (optimistic update pattern), and conditional rendering for plan view mode\n\n### Files Created\n- `web/src/components/plan-view/index.tsx` — Plan view component using same DnD pattern as List view (`DndContext`, `PointerSensor`, `useDroppable`, `DragOverlay`). Groups tasks by milestone (sorted alphabetically, \"No milestone\" last). Each card has a colored status dot since tasks aren't grouped by status.\n- `web/src/components/plan-view/index.module.css` — Styles based on List view layout (centered 800px groups), purple (#d2a8ff) milestone dots, `.cardRow`/`.statusDot`/`.cardWrapper` for status indicator layout.\n\n### Key Design Decisions\n- Used `__none__` sentinel string as droppable ID for the no-milestone group (maps back to empty string on drop)\n- Status dots are rendered in the Plan view's card wrapper (not in shared TaskCard) to keep TaskCard unchanged\n- `handleMilestoneChange` follows same optimistic-update-then-reload pattern as `handleStatusChange`\n",
+      "status": "done",
       "milestone": "v0.2",
       "commit_hash": "",
       "priority": "low",
@@ -208,7 +208,7 @@
       "ref_id": "GHST-14",
       "legacy_id": "",
       "created_at": "2026-02-24T16:04:32Z",
-      "updated_at": "2026-02-24T18:43:00Z"
+      "updated_at": "2026-02-26T15:22:02.342003Z"
     },
     {
       "id": 15,
@@ -464,6 +464,51 @@
       "legacy_id": "",
       "created_at": "2026-02-24T21:33:54Z",
       "updated_at": "2026-02-24T21:35:40Z"
+    },
+    {
+      "id": 32,
+      "title": "Add sorting and milestone filtering to web UI",
+      "description": "Added 4 sort options (newest, updated, priority, title) and toggleable milestone chip filters to both List and Board views. All client-side in useTaskFilters.",
+      "plan": "",
+      "status": "todo",
+      "milestone": "",
+      "commit_hash": "",
+      "priority": "",
+      "type": "feature",
+      "ref_id": "GHST-32",
+      "legacy_id": "",
+      "created_at": "2026-02-26T15:14:44.740206Z",
+      "updated_at": "2026-02-26T15:14:44.740206Z"
+    },
+    {
+      "id": 33,
+      "title": "Accept GHST-XX prefixed task IDs across CLI and API",
+      "description": "Added ParseTaskID helper in models package that strips the GHST- prefix before parsing. Updated all 3 CLI commands (show, update, delete) and all 4 API handlers to use it.",
+      "plan": "",
+      "status": "todo",
+      "milestone": "",
+      "commit_hash": "",
+      "priority": "",
+      "type": "improvement",
+      "ref_id": "GHST-33",
+      "legacy_id": "",
+      "created_at": "2026-02-26T15:14:44.750315Z",
+      "updated_at": "2026-02-26T15:14:44.750315Z"
+    },
+    {
+      "id": 34,
+      "title": "Improve workflow instructions for plan persistence and implementation notes",
+      "description": "Updated injected CLAUDE.md block, task-workflow skill, and auto-completion skill to be prescriptive about saving plans to tasks and writing implementation notes on completion.",
+      "plan": "",
+      "status": "todo",
+      "milestone": "",
+      "commit_hash": "",
+      "priority": "",
+      "type": "improvement",
+      "ref_id": "GHST-34",
+      "legacy_id": "",
+      "created_at": "2026-02-26T15:14:44.760108Z",
+      "updated_at": "2026-02-26T15:14:44.760108Z"
     }
   ],
   "recent_events": [
@@ -485,12 +530,12 @@
     }
   ],
   "summary": {
-    "total_tasks": 31,
+    "total_tasks": 34,
     "tasks_by_status": {
       "blocked": 1,
-      "done": 7,
+      "done": 8,
       "in_progress": 9,
-      "todo": 14
+      "todo": 16
     },
     "milestones": [
       {
@@ -501,7 +546,7 @@
       {
         "name": "v0.2",
         "total": 14,
-        "done": 1
+        "done": 2
       },
       {
         "name": "v0.3",

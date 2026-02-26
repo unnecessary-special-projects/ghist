@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import type { Task, TaskPriority, TaskType } from '../types';
 
-export type ViewMode = 'list' | 'board';
+export type ViewMode = 'list' | 'board' | 'plan';
 export type SortOption = 'newest' | 'updated' | 'priority' | 'title';
 
 const PRIORITY_ORDER: Record<TaskPriority, number> = {

@@ -1,0 +1,15 @@
+{
+  "id": 34,
+  "title": "Improve workflow instructions for plan persistence and implementation notes",
+  "description": "Updated injected CLAUDE.md block, task-workflow skill, and auto-completion skill to be prescriptive about saving plans to tasks and writing implementation notes on completion.",
+  "plan": "",
+  "status": "todo",
+  "milestone": "",
+  "commit_hash": "",
+  "priority": "",
+  "type": "improvement",
+  "ref_id": "GHST-34",
+  "legacy_id": "",
+  "created_at": "2026-02-26T15:14:44.760108Z",
+  "updated_at": "2026-02-26T15:14:44.760108Z"
+}
