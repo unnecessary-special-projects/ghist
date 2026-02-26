@@ -15,7 +15,7 @@
   border-radius: 8px;
   border: 1px solid #21262d;
   transition: border-color 0.15s;
-  width: 800px;
+  width: 1000px;
 }
 
 .groupOver {
@@ -58,26 +58,68 @@
 }
 
 .cards {
-  padding: 8px;
+  padding: 4px 8px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
-.cardRow {
+/* Plan card — single row */
+.row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: grab;
+  transition: background-color 0.1s;
 }
 
-.statusDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.row:hover {
+  background-color: #1c2129;
+}
+
+.row + .row {
+  border-top: 1px solid #21262d;
+}
+
+.rowDragging {
+  opacity: 0.4;
+}
+
+.rowOverlay {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.refId {
+  font-size: 12px;
+  color: #768390;
+  flex-shrink: 0;
+  min-width: 56px;
+}
+
+.title {
+  font-size: 13px;
+  color: #c9d1d9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.pills {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   flex-shrink: 0;
 }
 
-.cardWrapper {
-  flex: 1;
-  min-width: 0;
+.pill {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
 }

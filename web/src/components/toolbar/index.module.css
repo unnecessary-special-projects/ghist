@@ -73,6 +73,7 @@
 .milestoneBar {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 6px;
   padding: 6px 24px;

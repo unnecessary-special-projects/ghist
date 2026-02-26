@@ -50,6 +50,12 @@ export const Toolbar: React.FC<IToolbar> = (props) => {
         <div className={css.left}>
           <div className={css.segmented}>
             <button
+              className={cx(css.segBtn, { [css.segBtnActive]: props.viewMode === "plan" })}
+              onClick={() => props.onViewModeChange("plan")}
+            >
+              Plan
+            </button>
+            <button
               className={cx(css.segBtn, { [css.segBtnActive]: props.viewMode === "list" })}
               onClick={() => props.onViewModeChange("list")}
             >
@@ -60,12 +66,6 @@ export const Toolbar: React.FC<IToolbar> = (props) => {
               onClick={() => props.onViewModeChange("board")}
             >
               Board
-            </button>
-            <button
-              className={cx(css.segBtn, { [css.segBtnActive]: props.viewMode === "plan" })}
-              onClick={() => props.onViewModeChange("plan")}
-            >
-              Plan
             </button>
           </div>
         </div>

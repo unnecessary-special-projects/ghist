@@ -9,11 +9,17 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { useDroppable } from "@dnd-kit/core";
+import { useDroppable, useDraggable } from "@dnd-kit/core";
 import css from "./index.module.css";
 import type { Task } from "../../types";
-import { STATUS_COLORS } from "../../types";
-import { TaskCard } from "../task-card";
+import {
+  STATUS_COLORS,
+  STATUS_LABELS,
+  PRIORITY_COLORS,
+  PRIORITY_LABELS,
+  TYPE_COLORS,
+  TYPE_LABELS,
+} from "../../types";
 
 const NONE_SENTINEL = "__none__";
 
@@ -83,7 +89,7 @@ export const PlanView: React.FC<IPlanView> = (props) => {
       </div>
 
       <DragOverlay>
-        {activeTask ? <TaskCard task={activeTask} isOverlay /> : null}
+        {activeTask ? <PlanCard task={activeTask} isOverlay /> : null}
       </DragOverlay>
     </DndContext>
   );
@@ -120,19 +126,73 @@ function MilestoneGroup({
       {tasks.length > 0 && (
         <div className={css.cards}>
           {tasks.map((task) => (
-            <div key={task.id} className={css.cardRow}>
-              <span
-                className={css.statusDot}
-                style={{ backgroundColor: STATUS_COLORS[task.status] }}
-                title={task.status}
-              />
-              <div className={css.cardWrapper}>
-                <TaskCard task={task} onCardClick={onCardClick} />
-              </div>
-            </div>
+            <PlanCard key={task.id} task={task} onCardClick={onCardClick} />
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function PlanCard({
+  task,
+  onCardClick,
+  isOverlay,
+}: {
+  task: Task;
+  onCardClick?: (task: Task) => void;
+  isOverlay?: boolean;
+}) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: task.id,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      onClick={() => onCardClick?.(task)}
+      className={cx(css.row, {
+        [css.rowDragging]: isDragging && !isOverlay,
+        [css.rowOverlay]: isOverlay,
+      })}
+    >
+      <span className={css.refId}>{task.ref_id}</span>
+      <span className={css.title}>{task.title}</span>
+      <div className={css.pills}>
+        <span
+          className={css.pill}
+          style={{
+            color: STATUS_COLORS[task.status],
+            backgroundColor: `${STATUS_COLORS[task.status]}1a`,
+          }}
+        >
+          {STATUS_LABELS[task.status]}
+        </span>
+        {task.priority && (
+          <span
+            className={css.pill}
+            style={{
+              color: PRIORITY_COLORS[task.priority],
+              backgroundColor: `${PRIORITY_COLORS[task.priority]}1a`,
+            }}
+          >
+            {PRIORITY_LABELS[task.priority]}
+          </span>
+        )}
+        {task.type && (
+          <span
+            className={css.pill}
+            style={{
+              color: TYPE_COLORS[task.type],
+              backgroundColor: `${TYPE_COLORS[task.type]}1a`,
+            }}
+          >
+            {TYPE_LABELS[task.type]}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
